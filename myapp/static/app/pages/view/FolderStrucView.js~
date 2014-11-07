@@ -1,0 +1,197 @@
+Ext.define('dynamics.view.FolderStrucView',{
+    extend:'Ext.tree.Panel',
+    store:'FolderStrucStore',
+    alias:'widget.foldertree',
+    rootVisible:false,
+    border:false,
+    dockedItems:[{
+        xtype:'toolbar',
+        items:[{
+            xtype:'button',
+            icon:'/static/app/img/refresh.png',
+            tooltip:'Обновить дерево файлов',
+            handler:function(){
+                this.up('panel').store.load();
+            }
+        },'-',{
+            xtype:'button',
+            icon:'/static/app/img/add.png',
+            tooltip:'Добавить',
+            width:32,
+            menu:{
+                xtype:'menu',
+                items:[{
+                    text:'Добавить файл',
+                    icon:'/static/app/img/page.png',
+                    handler:function(){
+                        createFileFolder(this.up('button').up('panel'),1);
+                    }
+                },{
+                    text:'Добавить директорию',
+                    icon:'/static/app/img/folder.png',
+                    handler:function(){
+                        createFileFolder(this.up('button').up('panel'),2)
+                    }
+                }]
+            }
+        },{
+            xtype:'button',
+            icon:'/static/app/img/puzzle.png',
+            tooltip:'Изменить',
+            width:32,
+            menu:{
+                xtype:'menu',
+                items:[{
+                    text:'Изменить имя файла',
+                    icon:'/static/app/img/page.png',
+                    handler:function(){
+                        renameFileFolder(this.up('button').up('panel'),1);
+                    }
+                },{
+                    text:'Изменить имя директории',
+                    icon:'/static/app/img/folder.png',
+                    handler:function(){
+                        renameFileFolder(this.up('button').up('panel'),2);
+                    }
+                }]
+            }
+        },{
+            xtype:'button',
+            icon:'/static/app/img/remove.png',
+            tooltip:'Удалить',
+            width:32,
+            menu:{
+                xtype:'menu',
+                items:[{
+                    text:'Удалить файл',
+                    icon:'/static/app/img/remove_page.png',
+                    handler:function(){
+                        removeFileFolder(this.up('button').up('panel'),1);
+                    }
+                },{
+                    text:'Удалить директорию',
+                    icon:'/static/app/img/remove_folder.png',
+                    handler:function(){
+                        removeFileFolder(this.up('button').up('panel'),2)
+                    }
+                }]
+            }
+        }]
+    }],
+    listeners:{
+        itemclick:function (view,rec,item,index,eventObj){
+           if(rec.get('leaf')){
+               var tabpanel=this.up('viewport').down('tabpanel'),flag=true,i=0;
+               tabpanel.items.each(function(el){
+                   if(el.src==rec.get('id')){
+                       flag=false;
+                       tabpanel.setActiveTab(i);
+                   }
+                   i++;
+               });
+               if(flag)
+                   createTabIframe(this,'/myapp/loadcontenttotab/?filename='+rec.get('id'),rec.get('text'));
+           }
+        }
+    }
+});
+function createFileFolder(me,tp){
+  Ext.MessageBox.show({
+      title:'Название '+((tp==1)?'файла':'директории'),
+      msg:'',
+      buttons:Ext.MessageBox.OKCANCEL,
+      prompt:true,
+      fn:function(btn,txt,cBoxes){
+          if(btn=='ok'&&txt!=""){
+              //1. Если не выбрано ни одного файла в дереве, кладем в корень модуля
+              //2. Если выбран файл, то кладем в ту же категорию, в которой он лежит
+              //3. Если выбрана директория, то кладем в нее
+              var node=me.getSelectionModel().getSelection()[0],path="";
+              if(node){
+                  if(node.get('leaf')) path=node.get('id_parent');
+                  else path=node.get('id');
+              }
+              else {
+                  node=me.getRootNode();
+                  path=node.get('id');
+              }
+              path+='/'+txt;
+              ajaxRequest('/myapp/create'+((tp==1)?'File/':'Folder/')+'?filename='+path,'GET',function(){
+                  me.store.load();
+              });
+           }
+       }
+   });
+}
+function removeFileFolder(me,tp){
+    var node=me.getSelectionModel().getSelection()[0];
+    if(node&&node.get('leaf')&&tp==2){
+        Ext.Msg.alert('Внимание','Необходимо выбрать директорию');
+    }
+    else if(node&&!node.get('leaf')&&tp==1){
+        Ext.Msg.alert('Внимание','Необходимо выбрать файл');
+    }
+    else if(node){
+        Ext.MessageBox.show({
+            title:'Подтвердите',
+            msg:'Вы уверены, что хотите удалить?',
+            buttons:Ext.MessageBox.OKCANCEL,
+            fn:function(btn){
+                if(btn=='ok'){
+                    if(tp==1){
+                        var tabpanel=me.up('viewport').down('tabpanel');
+                        tabpanel.items.each(function(el){
+                            if(el.src==node.get('id')){
+                                el.destroy();
+                                tabpanel.setActiveTab(0);
+                            }
+                        });
+                    }
+                    ajaxRequest('/myapp/remove'+((tp==1)?'File/':'Folder/')+'?filename='+node.get('id'),'GET',function(){
+                        me.store.load();
+                    });                    
+                }
+            }
+        });
+    }
+    else {
+        Ext.Msg.alert('Внимание','Необходимо выбрать '+((tp==1)?'файл':'директорию'));
+    }
+}
+function renameFileFolder(me,tp){
+    var node=me.getSelectionModel().getSelection()[0],newname="";
+    if(node&&node.get('leaf')&&tp==2){
+        Ext.Msg.alert('Внимание','Необходимо выбрать директорию');
+    }
+    else if(node&&!node.get('leaf')&&tp==1){
+        Ext.Msg.alert('Внимание','Необходимо выбрать файл');
+    }
+    else if(node){
+        Ext.MessageBox.show({
+            title:'Название '+((tp==1)?'файла':'директории'),
+            msg:'',
+            buttons:Ext.MessageBox.OKCANCEL,
+            prompt:true,
+            fn:function(btn,txt,cBoxes){
+                 if(btn=='ok'&&txt!=""){
+                    newname=node.get('id_parent')+'/'+txt;
+                    if(tp==1){
+                        var tabpanel=me.up('viewport').down('tabpanel');
+                        tabpanel.items.each(function(el){
+                            if(el.src==node.get('id')){
+				el.setTitle(txt);
+                                el.src=newname;
+                            }
+                        });
+                    }
+                    ajaxRequest('/myapp/renameFileFolder/?oldname='+node.get('id')+'&newname='+newname,'GET',function(){
+                        me.store.load();
+                    });
+                 }
+             }
+        });
+    }
+    else {
+        Ext.Msg.alert('Внимание','Необходимо выбрать '+((tp==1)?'файл':'директорию'));
+    }
+}

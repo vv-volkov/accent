@@ -1,0 +1,19 @@
+Ext.define('dynamics.store.FolderStrucStore',{
+    extend:'Ext.data.TreeStore',
+    model:'dynamics.model.FolderStrucModel',
+    autoLoad:true,
+    proxy:{
+        type:'ajax',
+        url:'/myapp/folderstruc'
+    },
+    snapshot:{
+        text:'',
+        expanded:true,
+        id:'./myapp/'
+    },
+    root:{
+        text:'',
+        expanded:true,
+        id:'./myapp/static/app/pages'
+    }
+})

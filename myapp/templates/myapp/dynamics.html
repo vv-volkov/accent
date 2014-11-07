@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/ext-5.0.1/packages/ext-theme-classic/build/resources/ext-theme-classic-all.css">
+    <style type="text/css">
+        .javascript{
+            background-image:url("/static/app/img/code_javascript_16.png");
+        }
+        .python{
+            background-image:url("/static/app/img/code_python.png");
+        }
+        .fortran{
+            background-image:url("/static/app/img/code_fortran.png");
+        }
+        .explorer{
+            background-image:url("/static/app/img/explorer.png");
+        }
+       .x-fieldset-default {
+           border-radius: 0;
+       }
+    </style>
+    <script type="text/javascript" src="/static/ext-5.0.1/build/ext-all.js"></script>
+    <script type="text/javascript" src="/static/ext-5.0.1/build/packages/ext-locale/build/ext-locale-ru.js"></script>
+    <script type="text/javascript" src="/static/app/pages/lib/js/sharedFuncs.js"></script>
+    <script type="text/javascript" src="/static/app/pages/lib/js/overrides.js"></script>
+    <script type="text/javascript" src="/static/app/pages/dynamics.js"></script>    
+    <script type="text/javascript" src="/static/app/pages/lib/js/MathJax-2.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+        });
+    </script>
+  </head>
+  <body>
+    <div id="math" name="math" class="x-hidden" style="padding:4px">$\text{Исходная система:} \\ \begin{cases} m \ddot x = z E - m g & 0 < x <  d \\ \dot z = G \end{cases} \\ \begin{cases} y_+ = R y_- \\ z = \begin{cases} z(x = 0) = z_0 & x = 0 \text{ или } x = d \\ z(x = d) = -z_0 \end{cases} \end{cases} \\ \text{В безразмерных координатах:} \\ \begin{cases} \dot x = y \\ \dot y = z - 1 & 0 < x < 1 \\ \dot z = q \end{cases} \\ \begin{cases} y_+ = -R y_- \\ z = \begin{cases} z(x = 0) = z_0 & x = 0 \text{ или } x = 1 \\ z(x = 1) = -z_0 \end{cases}\end{cases}$</div>
+    <div id="z0" name="z0" class="x-hidden">$ z_0 $</div>
+    <div id="R" name="R" class="x-hidden">$ R $</div>
+    <div id="q" name="q" class="x-hidden">$ q $</div>
+  </body>
+</html>

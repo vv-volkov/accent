@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/ext-5.0.1/packages/ext-theme-classic/build/resources/ext-theme-classic-all.css">
+    <style type="text/css">
+        .javascript{
+            background-image:url("/static/app/img/code_javascript_16.png");
+        }
+        .python{
+            background-image:url("/static/app/img/code_python.png");
+        }
+        .fortran{
+            background-image:url("/static/app/img/code_fortran.png");
+        }
+        .explorer{
+            background-image:url("/static/app/img/explorer.png");
+        }
+    </style>
+    <script type="text/javascript" src="/static/ext-5.0.1/build/ext-all.js"></script>
+    <script type="text/javascript" src="/static/ext-5.0.1/build/packages/ext-locale/build/ext-locale-ru.js"></script>
+    <script type="text/javascript" src="/static/app/pages/dynamics.js"></script>
+    <script type="text/javascript" src="/static/app/pages/lib/js/sharedFuncs.js"></script>
+    <script type="text/javascript" src="/static/app/pages/lib/js/MathJax-2.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+        });
+    </script>
+  </head>
+  <body>
+    <div id="math" name="math" class="x-hidden" style="padding:4px">$\begin{cases}m\ddot x = z E - m g \\ \dot z = G \end{cases}$</div>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+Ext.Loader.setConfig({enabled:true, disableCaching:true});
+
+Ext.Loader.setPath('Ext.ux','/static/ext-5.0.1/examples/ux');
+
+Ext.require(['Ext.ux.TabReorderer','Ext.ux.BoxReorderer']);
+
+Ext.application({
+    name:'dynamics',
+    appFolder:'/static/app/pages',
+    requires:[
+        'Ext.container.Viewport',
+        'Ext.layout.container.Border'
+    ],
+    controllers:['Main'],
+    autoCreateViewport:false,
+    launch:function(){
+        Ext.create('Ext.container.Viewport',{
+            layout:'border',
+            items:[{
+                region:'west',
+                layout:'fit',
+                width:220,
+                collapsible:true,
+                collapseMode:'mini',
+                split:true,
+                autoScroll:true,
+                items:[{
+                    xtype:'foldertree'
+                }]            
+            },{
+                region:'center',
+                xtype:'tabpanel',
+                layout:'fit',
+                plugins:Ext.create('Ext.ux.TabReorderer',{}), 
+                padding:'0 0 0 0',
+                margin:'0 0 0 0',
+                bodyStyle:'padding: 0 0 0 0;',
+                items:[{
+                    title:'Программа',
+                    closable:false,
+                    icon:'/static/app/img/run.png'
+                },{
+                    title:'Описание. Шаблон',
+                    closable:false,
+                    icon:'/static/app/img/template.png'
+                },{
+                    title:'Описание. Документ',
+                    icon:'/static/app/img/explorer.png'
+                    closable:false
+                }]
+            }]
+        });
+    }
+});
+
+
+
+
