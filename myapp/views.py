@@ -144,12 +144,17 @@ def gitmodified(request):
     status = command('git status --short').split('\n')
     output = []
     for x in status:
-        if x != '' and ( x.startswith(' M ') or x.startswith('MM ')):
-            output.append({'filename':x.replace('MM ','').replace(' M ','')})  
+        if x != '' and ( x.startswith(' M ') or x.startswith('MM ') or x.startswith('M ') or x.startswith('M  ')):
+            output.append({'filename':x.replace('MM ','').replace(' M ','').replace('M ','').replace('M  ','')})  
     os.chdir(savedPath)
     return HttpResponse([output])
   
-  
+def gitPush(request):
+    savedPath = os.getcwd()
+    os.chdir(repoDir)
+    command('git push')
+    os.chdir(savedPath)
+    return HttpResponse("Pushed it!!!")
   
   
   

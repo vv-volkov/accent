@@ -138,7 +138,6 @@ function reloadFolderTree(treeStore,node){
     treeStore.setRootNode(node);
     treeStore.load();
 }
-
 function moveFileFolder(src,dest,filename){
     ajaxRequest('/myapp/moveFileFolder/?src='+src+'&dest='+dest+'/'+filename,'GET',{},function(){});
 }
@@ -146,10 +145,13 @@ function doGitStatus(me,txt){
     createTabIframe(me,'/myapp/gitStatus',txt);
 }
 function doGitPush(me,txt){
-    alert("Try to push!!!");
+    ajaxRequest('/myapp/gitPush/','GET',{},function(){
+        //mymask.destroy();
+        Ext.Msg.alert('Внимание','Операция выполнена');    
+    });
 }
 function doGitPull(me,txt){
-    alert("Try to pull!!!");
+    ajaxRequest('/myapp/gitPull/','GET',{},function(){});
 }
 
 

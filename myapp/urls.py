@@ -18,4 +18,5 @@ urlpatterns = [
     url(r'^gitStatus',views.gitStatus),
     url(r'^gitAdd',views.gitAdd),
     url(r'^gitmodified',views.gitmodified),
+    url(r'^gitPush',views.gitPush),
 ]

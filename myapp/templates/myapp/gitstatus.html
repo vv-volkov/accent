@@ -5,7 +5,7 @@
     <script type="text/javascript" src="/static/ext-5.0.1/build/packages/ext-locale/build/ext-locale-ru.js"></script>
     <script type="text/javascript" src="/static/app/pages/lib/js/sharedFuncs.js"></script>
     <script type="text/javascript">
-      Ext.Loader.setConfig({enabled:true, disableCaching:true});
+       Ext.Loader.setConfig({enabled:true, disableCaching:true});
        Ext.Loader.setPath('Ext.ux','/static/ext-5.0.1/examples/ux');
        Ext.require(['*']);
        Ext.onReady(function(){            
@@ -80,9 +80,9 @@
                                                        msg:'Изменения сохранены',
                                                        closable:true,
                                                        buttons:Ext.Msg.OK,
-                                                       listeners:{
-                                                           close:function(){
-                                                               alert('Done!!!');
+                                                       fn:function(btn){
+                                                           if(btn=='ok'){
+                                                               grid.store.remove(records);
                                                            }
                                                        }
                                                    });
