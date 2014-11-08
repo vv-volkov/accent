@@ -70,14 +70,22 @@
                                                        name:'filenames',
                                                        value:JSON.stringify(values)
                                                    }]
-                                               });
+                                               }),
+                                               mymask=new Ext.LoadMask(grid,{msg:'Операция выполняется'});
+                                               mymask.show();
                                                frm.getForm().submit({url:'/myapp/gitAdd/',success:function(form,action){
+                                                   mymask.destroy();
                                                    Ext.MessageBox.show({
                                                        title:'Внимание',
                                                        msg:'Изменения сохранены',
                                                        closable:true,
-                                                       buttons:Ext.Msg.OK
-                                                   })
+                                                       buttons:Ext.Msg.OK,
+                                                       listeners:{
+                                                           close:function(){
+                                                               alert('Done!!!');
+                                                           }
+                                                       }
+                                                   });
                                                }});
                                            }
                                            else {
@@ -97,9 +105,9 @@
                        border:false,
                        store: Ext.data.StoreManager.lookup('gitmodified'),
                        selModel:Ext.create('Ext.selection.CheckboxModel'),
-                       columns: [
-                            { text: 'Имя файла',  dataIndex: 'filename', flex: 1 }
-                       ]
+                       columns:[{ 
+                           text:'Имя файла',dataIndex:'filename',flex:1
+                       }]
                    }]
                }]
            });

@@ -5,8 +5,6 @@ from django.template import RequestContext, Context, loader
 from django.core import serializers
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt
-#from gittle import Gittle
-#from git import *
 from subprocess import *
 
 import os
@@ -128,6 +126,7 @@ def gitStatus(request):
 
 @csrf_exempt
 def gitAdd(request):
+    savedPath = os.getcwd()
     os.chdir(repoDir)
     msg = request.POST['msg']
     files = request.POST['filenames'].split(",")
@@ -145,8 +144,8 @@ def gitmodified(request):
     status = command('git status --short').split('\n')
     output = []
     for x in status:
-        if x != '' and x.startswith(' M '):
-            output.append({'filename':x.replace(' M ','')})  
+        if x != '' and ( x.startswith(' M ') or x.startswith('MM ')):
+            output.append({'filename':x.replace('MM ','').replace(' M ','')})  
     os.chdir(savedPath)
     return HttpResponse([output])
   
