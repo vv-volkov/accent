@@ -1,3 +1,4 @@
+/* Modification */
 Ext.define('dynamics.view.FolderStrucView',{
     extend:'Ext.tree.Panel',
     store:'FolderStrucStore',
