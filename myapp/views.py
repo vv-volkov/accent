@@ -1,18 +1,21 @@
 #--coding: utf-8
-# Hello world!!!
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import RequestContext, Context, loader
 from django.core import serializers
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt
-from gittle import Gittle
-from git import *
+#from gittle import Gittle
+#from git import *
+from subprocess import *
 
 import os
 import json
 import codecs
 import shutil
+import string
+
+repoDir = '.'
 
 def index(request):
     template = loader.get_template('myapp/index.html')
@@ -115,26 +118,36 @@ def moveFileFolder(request):
     os.rename(request.GET['src'], request.GET['dest'])
     return HttpResponse('{"success":true}', content_type="application/json")
   
-def gitStatus(request):
-    #template = loader.get_template('myapp/gitstatus.html')
-    #context = Context()
-    #return HttpResponse(template.render(context))
-    repo = Repo('~/Projects/proj1/')
-    return HttpResponse(repo.status())
-    
+def command(x):
+    return str(Popen(x.split(' '),stdout = PIPE).communicate()[0])
   
+def gitStatus(request):
+    template = loader.get_template('myapp/gitstatus.html')
+    context = Context()
+    return HttpResponse(template.render(context))
+
+@csrf_exempt
 def gitAdd(request):
-    return HttpResponse()
+    os.chdir(repoDir)
+    msg = request.POST['msg']
+    files = request.POST['filenames'].split(",")
+    filename = ''
+    for x in files:
+        filename = x.replace('"','').replace('[','').replace(']','')
+        command('git add ' + filename)
+    command('git commit -m ' + msg)
+    os.chdir(savedPath)
+    return HttpResponse('{"success":true}', content_type="application/json")
   
 def gitmodified(request):
-    repo_path = '.'
-    repo_url = 'git@github.com:vv-volkov/FileManager.git'
-    repo = Gittle(repo_path, origin_uri = repo_url)
+    savedPath = os.getcwd()
+    os.chdir(repoDir)
+    status = command('git status --short').split('\n')
     output = []
-    data = ['./myapp/static/app/pages/dynamics.js']
-    #repo.modified_files
-    for x in data:
-       output.append({"filename":x})
+    for x in status:
+        if x != '' and x.startswith(' M '):
+            output.append({'filename':x.replace(' M ','')})  
+    os.chdir(savedPath)
     return HttpResponse([output])
   
   

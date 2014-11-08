@@ -91,14 +91,8 @@ Ext.define('dynamics.view.FolderStrucView',{
             menu:{
                 xtype:'menu',
                 items:[{
-                    text:'Статус обновлений',
+                    text:'Статус',
                     itemId:'gitStatus'
-                },{
-                    text:'Добавить обновление',
-                    itemId:'gitAdd'
-                },{
-                    text:'Сделать коммит',
-                    itemId:'gitCommit'
                 },{
                     text:'Передать на сервер',
                     itemId:'gitPush'

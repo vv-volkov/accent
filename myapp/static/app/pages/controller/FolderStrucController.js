@@ -54,12 +54,6 @@ Ext.define('dynamics.controller.FolderStrucController',{
             'foldertree menuitem[itemId=gitStatus]':{
                 click:this.gitStatus
             },
-            'foldertree menuitem[itemId=gitAdd]':{
-                click:this.gitAdd
-            },
-            'foldertree menuitem[itemId=gitCommit]':{
-                click:this.gitCommit
-            },
             'foldertree menuitem[itemId=gitPush]':{
                 click:this.gitPush
             },
@@ -101,12 +95,6 @@ Ext.define('dynamics.controller.FolderStrucController',{
     },
     gitStatus:function(menuitem){
         doGitStatus(menuitem,menuitem.text);
-    },
-    gitAdd:function(menuitem){
-        doGitAdd(menuitem,menuitem.text);
-    },
-    gitCommit:function(menuitem){
-        doGitCommit(menuitem,menuitem.text);
     },
     gitPush:function(menuitem){
         doGitPush(menuitem,menuitem.text);

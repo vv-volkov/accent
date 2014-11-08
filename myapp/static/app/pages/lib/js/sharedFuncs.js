@@ -22,7 +22,7 @@ function ajaxRequest(url,method,args,callback){
         success:function(res,req){
             if(callback!=undefined)callback(args);
         }
-    })
+    });
 }
 function createFileFolder(me,tp){
   Ext.MessageBox.show({
@@ -144,12 +144,6 @@ function moveFileFolder(src,dest,filename){
 }
 function doGitStatus(me,txt){
     createTabIframe(me,'/myapp/gitStatus',txt);
-}
-function doGitAdd(me,txt){
-    createTabIframe(me,'/myapp/gitAdd',txt);
-}
-function doGitCommit(me,txt){
-    alert("Try to commit!!!");
 }
 function doGitPush(me,txt){
     alert("Try to push!!!");

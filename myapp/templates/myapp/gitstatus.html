@@ -38,6 +38,58 @@
                            handler:function(){
                                this.up('viewport').down('grid').store.load();
                            }
+                       },'-',{
+                           xtype:'button',
+                           tooltip:'Добавить',
+                           icon:'/static/app/img/add.png',
+                           handler:function(){
+                               var grid=this.up('viewport').down('grid'),
+                               records=grid.getSelectionModel().getSelection(),
+                               filenames=[],values=[];
+                               if(records.length){
+                                   Ext.MessageBox.show({
+                                       title:'Сообщение',
+                                       msg:'',
+                                       buttons:Ext.MessageBox.OKCANCEL,
+                                       prompt:true,
+                                       fn:function(btn,txt,cBoxes){
+                                           if(btn=='ok'&&txt!=""){
+                                               for(var i=0;i<records.length;i++){
+                                                   values.push(records[i].get('filename'))
+                                                   filenames.push([records[i].get('filename')]);
+                                               }
+                                               var frm=Ext.create('Ext.form.Panel',{
+                                                   method:'POST',
+                                                   standardSubmit:false,
+                                                   items:[{
+                                                       xtype:'textfield',
+                                                       name:'msg',
+                                                       value:txt
+                                                   },{
+                                                       xtype:'textarea',
+                                                       name:'filenames',
+                                                       value:JSON.stringify(values)
+                                                   }]
+                                               });
+                                               frm.getForm().submit({url:'/myapp/gitAdd/',success:function(form,action){
+                                                   Ext.MessageBox.show({
+                                                       title:'Внимание',
+                                                       msg:'Изменения сохранены',
+                                                       closable:true,
+                                                       buttons:Ext.Msg.OK
+                                                   })
+                                               }});
+                                           }
+                                           else {
+                                               Ext.Msg.alert('Внимание','Необходимо указать сообщение');        
+                                           }                    
+                                       }  
+                                   });
+                               }
+                               else {
+                                   Ext.Msg.alert('Внимание','Необходимо выбрать хотя бы один файл');                               
+                               }      
+                           }
                        }]
                    }],
                    items:[{
