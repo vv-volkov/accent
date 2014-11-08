@@ -5,6 +5,9 @@ from django.template import RequestContext, Context, loader
 from django.core import serializers
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt
+from gittle import Gittle
+from git import *
+
 import os
 import json
 import codecs
@@ -25,7 +28,7 @@ def path_to_dict(path):
     for x in os.listdir(path):
         fullpath = os.path.join(path,x)
         ext = os.path.splitext(fullpath)[1]
-        if ext != ".js~" and ext != ".py~" and ext != ".f90~" and ext != ".html~": 
+        if ext != ".js~" and ext != ".py~" and ext != ".f90~" and ext != ".html~" and ext != ".pyc": 
             el=dict([("text",x)])
             el['id'] = fullpath
             el['id_parent'] = path        
@@ -110,3 +113,35 @@ def saveSourceCode(request):
 def moveFileFolder(request):
     os.rename(request.GET['src'], request.GET['dest'])
     return HttpResponse('{"success":true}', content_type="application/json")
+  
+def gitStatus(request):
+    #template = loader.get_template('myapp/gitstatus.html')
+    #context = Context()
+    #return HttpResponse(template.render(context))
+    repo = Repo('~/Projects/proj1/')
+    return HttpResponse(repo.status())
+    
+  
+def gitAdd(request):
+    return HttpResponse()
+  
+def gitmodified(request):
+    repo_path = '.'
+    repo_url = 'git@github.com:vv-volkov/FileManager.git'
+    repo = Gittle(repo_path, origin_uri = repo_url)
+    output = []
+    data = ['./myapp/static/app/pages/dynamics.js']
+    #repo.modified_files
+    for x in data:
+       output.append({"filename":x})
+    return HttpResponse([output])
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

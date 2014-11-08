@@ -15,4 +15,7 @@ urlpatterns = [
     url(r'^saveSourceCode',views.saveSourceCode),
     url(r'^code',views.code),
     url(r'^moveFileFolder',views.moveFileFolder),
+    url(r'^gitStatus',views.gitStatus),
+    url(r'^gitAdd',views.gitAdd),
+    url(r'^gitmodified',views.gitmodified),
 ]

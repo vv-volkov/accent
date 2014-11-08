@@ -142,3 +142,25 @@ function reloadFolderTree(treeStore,node){
 function moveFileFolder(src,dest,filename){
     ajaxRequest('/myapp/moveFileFolder/?src='+src+'&dest='+dest+'/'+filename,'GET',{},function(){});
 }
+function doGitStatus(me,txt){
+    createTabIframe(me,'/myapp/gitStatus',txt);
+}
+function doGitAdd(me,txt){
+    createTabIframe(me,'/myapp/gitAdd',txt);
+}
+function doGitCommit(me,txt){
+    alert("Try to commit!!!");
+}
+function doGitPush(me,txt){
+    alert("Try to push!!!");
+}
+function doGitPull(me,txt){
+    alert("Try to pull!!!");
+}
+
+
+
+
+
+
+

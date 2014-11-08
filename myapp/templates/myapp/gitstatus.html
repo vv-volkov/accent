@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/ext-5.0.1/packages/ext-theme-classic/build/resources/ext-theme-classic-all.css">
+    <script type="text/javascript" src="/static/ext-5.0.1/build/ext-all.js"></script>
+    <script type="text/javascript" src="/static/ext-5.0.1/build/packages/ext-locale/build/ext-locale-ru.js"></script>
+    <script type="text/javascript" src="/static/app/pages/lib/js/sharedFuncs.js"></script>
+    <script type="text/javascript">
+      Ext.Loader.setConfig({enabled:true, disableCaching:true});
+       Ext.Loader.setPath('Ext.ux','/static/ext-5.0.1/examples/ux');
+       Ext.require(['*']);
+       Ext.onReady(function(){            
+           Ext.tip.QuickTipManager.init();         
+           Ext.create('Ext.data.JsonStore',{
+              autoLoad:true,
+              storeId:'gitmodified',
+              fields:['filename'],
+              proxy:{
+                  type:'ajax',
+                  url:'/myapp/gitmodified/',
+                  reader:{
+                      type:'json'
+                  }
+              }
+           });         
+           Ext.create('Ext.container.Viewport',{
+               layout:'border',
+               items:[{
+                   region:'center',
+                   layout:'fit',
+                   border:false,
+                   dockedItems:[{
+                       xtype:'toolbar',
+                       border:false,
+                       items:[{
+                           xtype:'button',
+                           tooltip:'Обновить',
+                           icon:'/static/app/img/refresh.png',
+                           handler:function(){
+                               this.up('viewport').down('grid').store.load();
+                           }
+                       }]
+                   }],
+                   items:[{
+                       xtype:'grid',
+                       border:false,
+                       store: Ext.data.StoreManager.lookup('gitmodified'),
+                       selModel:Ext.create('Ext.selection.CheckboxModel'),
+                       columns: [
+                            { text: 'Имя файла',  dataIndex: 'filename', flex: 1 }
+                       ]
+                   }]
+               }]
+           });
+       });      
+    </script>
+  </head>
+</html>

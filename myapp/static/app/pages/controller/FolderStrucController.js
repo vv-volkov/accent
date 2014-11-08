@@ -50,6 +50,21 @@ Ext.define('dynamics.controller.FolderStrucController',{
             },
             'foldertree menuitem[itemId=refreshAll]':{
                 click:this.refreshAll
+            },           
+            'foldertree menuitem[itemId=gitStatus]':{
+                click:this.gitStatus
+            },
+            'foldertree menuitem[itemId=gitAdd]':{
+                click:this.gitAdd
+            },
+            'foldertree menuitem[itemId=gitCommit]':{
+                click:this.gitCommit
+            },
+            'foldertree menuitem[itemId=gitPush]':{
+                click:this.gitPush
+            },
+            'foldertree menuitem[itemId=gitPull]':{
+                click:this.gitPull
             }
         });
     },
@@ -83,5 +98,21 @@ Ext.define('dynamics.controller.FolderStrucController',{
         var treeStore=menuitem.up('button').up('panel').store,
         node={expanded:true,id:'./myapp/'};
         reloadFolderTree(treeStore,node);
-    } 
+    },
+    gitStatus:function(menuitem){
+        doGitStatus(menuitem,menuitem.text);
+    },
+    gitAdd:function(menuitem){
+        doGitAdd(menuitem,menuitem.text);
+    },
+    gitCommit:function(menuitem){
+        doGitCommit(menuitem,menuitem.text);
+    },
+    gitPush:function(menuitem){
+        doGitPush(menuitem,menuitem.text);
+    },
+    gitPull:function(menuitem){
+        doGitPull(menuitem,menuitem.text);
+    }
 });
+

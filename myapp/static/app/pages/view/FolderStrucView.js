@@ -1,4 +1,3 @@
-/* Modification */
 Ext.define('dynamics.view.FolderStrucView',{
     extend:'Ext.tree.Panel',
     store:'FolderStrucStore',
@@ -92,10 +91,19 @@ Ext.define('dynamics.view.FolderStrucView',{
             menu:{
                 xtype:'menu',
                 items:[{
+                    text:'Статус обновлений',
+                    itemId:'gitStatus'
+                },{
+                    text:'Добавить обновление',
+                    itemId:'gitAdd'
+                },{
+                    text:'Сделать коммит',
+                    itemId:'gitCommit'
+                },{
                     text:'Передать на сервер',
                     itemId:'gitPush'
                 },{
-                    text:'Взять с сервера',
+                    text:'Получить с сервера',
                     itemId:'gitPull'
                 }]
             }
