@@ -145,7 +145,11 @@ function doGitStatus(me,txt){
     createTabIframe(me,'/myapp/gitStatus',txt);
 }
 function doGitPush(me){
-    ajaxRequest('/myapp/gitPush/','GET',{},function(){
+    mymask=new Ext.LoadMask(me.up('viewport').down('panel'),{msg:'Операция выполняется'});
+    mymask.show();
+    args={'mask':mymask};
+    ajaxRequest('/myapp/gitPush/','GET',args,function(){
+        args['mask'].destroy();
         Ext.Msg.alert('Внимание','Операция выполнена');    
     });
 }
