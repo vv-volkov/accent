@@ -144,7 +144,7 @@ function moveFileFolder(src,dest,filename){
 function doGitStatus(me,txt){
     createTabIframe(me,'/myapp/gitStatus',txt);
 }
-function doGitPush(me,txt){
+function doGitPush(me){
     ajaxRequest('/myapp/gitPush/','GET',{},function(){
         Ext.Msg.alert('Внимание','Операция выполнена');    
     });

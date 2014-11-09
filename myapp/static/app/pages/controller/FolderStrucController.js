@@ -102,10 +102,10 @@ Ext.define('dynamics.controller.FolderStrucController',{
         doGitStatus(menuitem,menuitem.text);
     },
     gitPush:function(menuitem){
-        doGitPush(menuitem,menuitem.text);
+        doGitPush(menuitem);
     },
     gitPull:function(menuitem){
-        doGitPull(menuitem,menuitem.text);
+        doGitPull(menuitem);
     }
 });
 

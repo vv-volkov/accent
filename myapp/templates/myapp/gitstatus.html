@@ -43,7 +43,7 @@
                            tooltip:'Добавить',
                            icon:'/static/app/img/add.png',
                            handler:function(){
-                               var grid=this.up('viewport').down('grid'),
+                               var me=this,grid=this.up('viewport').down('grid'),
                                records=grid.getSelectionModel().getSelection(),
                                filenames=[],values=[];
                                if(records.length){
@@ -77,13 +77,12 @@
                                                    mymask.destroy();
                                                    Ext.MessageBox.show({
                                                        title:'Внимание',
-                                                       msg:'Изменения сохранены',
+                                                       msg:'Передать на сервер?',
                                                        closable:true,
-                                                       buttons:Ext.Msg.OK,
+                                                       buttons:Ext.Msg.OKCANCEL,
                                                        fn:function(btn){
-                                                           if(btn=='ok'){
-                                                               grid.store.remove(records);
-                                                           }
+                                                           if(btn=='ok') doGitPush(me);
+                                                           grid.store.remove(records);
                                                        }
                                                    });
                                                }});
