@@ -128,13 +128,16 @@ def gitStatus(request):
 def gitAdd(request):
     savedPath = os.getcwd()
     os.chdir(repoDir)
-    msg = request.POST['msg']
-    files = request.POST['filenames'].split(",")
-    filename = ''
-    for x in files:
-        filename = x.replace('"','').replace('[','').replace(']','')
-        command('git add ' + filename)
-    command('git commit -m ' + msg)
+    #msg = request.POST['msg']
+    #files = request.POST['filenames'].split(",")
+    #filename = ''
+    #for x in files:
+        #filename = x.replace('"','').replace('[','').replace(']','')
+        #command('git add ' + filename)
+    #command('git commit -m ' + msg)
+    command('git add myapp/views.py')
+    command('git add myapp/views.pys')
+    command('git commit -m "Hello"')
     os.chdir(savedPath)
     return HttpResponse('{"success":true}', content_type="application/json")
   
@@ -154,7 +157,7 @@ def gitPush(request):
     os.chdir(repoDir)
     command('git push')
     os.chdir(savedPath)
-    return HttpResponse("Pushed it!!!")
+    return HttpResponse()
   
   
   
