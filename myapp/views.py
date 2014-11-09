@@ -133,9 +133,7 @@ def gitAdd(request):
     filename = ''
     for x in files:
         filename = x.replace('"','').replace('[','').replace(']','')
-        #command('git add ' + filename)
         check_output(['git', 'add', filename])
-    #command('git commit -m ' + msg.replace(' ','_'))
     check_output(['git', 'commit', '-m', msg])
     os.chdir(savedPath)
     return HttpResponse('{"success":true}', content_type="application/json")
@@ -154,7 +152,6 @@ def gitmodified(request):
 def gitPush(request):
     savedPath = os.getcwd()
     os.chdir(repoDir)
-    #command('git push')
     check_output(['git', 'push'])
     os.chdir(savedPath)
     return HttpResponse()
