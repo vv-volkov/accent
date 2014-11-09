@@ -84,7 +84,7 @@ Ext.define('dynamics.view.FolderStrucView',{
                     itemId:'refreshAll'
                 }]
             }
-        },{
+        },'',{
             xtype:'button',
             icon:'/static/app/img/git.png',
             tooltip:'Cинхронизация с сервером',
