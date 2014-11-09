@@ -126,7 +126,7 @@ def gitStatus(request):
 
 @csrf_exempt
 def gitAdd(request):
-    #test
+    #do again
     savedPath = os.getcwd()
     os.chdir(repoDir)
     msg = request.POST['msg']
@@ -135,7 +135,7 @@ def gitAdd(request):
     for x in files:
         filename = x.replace('"','').replace('[','').replace(']','')
         command('git add ' + filename)
-    command('git commit -m "%s"'%msg)
+    command('git commit -am "%s"'%msg)
     os.chdir(savedPath)
     return HttpResponse('{"success":true}', content_type="application/json")
   
