@@ -138,9 +138,9 @@ def gitAdd(request):
         with open(fname, 'a') as fout:
             fout.write('git add ' + filename)
             fout.close()
-    command('git commit -m ' + msg)
+    command('git commit -m "' + msg + '"')
     with open(fname, 'a') as fout:
-        fout.write('git commit -m ' + msg)
+        fout.write('git commit -m "' + msg + '"')
         fout.close()
     os.chdir(savedPath)
     return HttpResponse('{"success":true}', content_type="application/json")
