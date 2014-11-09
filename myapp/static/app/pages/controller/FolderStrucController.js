@@ -59,6 +59,11 @@ Ext.define('dynamics.controller.FolderStrucController',{
             },
             'foldertree menuitem[itemId=gitPull]':{
                 click:this.gitPull
+            },
+            'foldertree menu':{
+                mouseleave:function(menu){
+                    menu.hide();
+                }
             }
         });
     },

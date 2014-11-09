@@ -12,6 +12,7 @@ Ext.define('dynamics.view.FolderStrucView',{
     },
     dockedItems:[{
         xtype:'toolbar',
+        itemId:'foldertbar',
         items:[{
             xtype:'button',
             icon:'/static/app/img/refresh.png',
