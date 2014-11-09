@@ -126,7 +126,6 @@ def gitStatus(request):
 
 @csrf_exempt
 def gitAdd(request):
-    #do again
     savedPath = os.getcwd()
     os.chdir(repoDir)
     msg = request.POST['msg']
