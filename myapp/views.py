@@ -131,17 +131,10 @@ def gitAdd(request):
     msg = request.POST['msg']
     files = request.POST['filenames'].split(",")
     filename = ''
-    fname = 'log.txt'
     for x in files:
         filename = x.replace('"','').replace('[','').replace(']','')
         command('git add ' + filename)
-        with open(fname, 'a') as fout:
-            fout.write('git add ' + filename)
-            fout.close()
     command('git commit -m "' + msg + '"')
-    with open(fname, 'a') as fout:
-        fout.write('git commit -m "' + msg + '"')
-        fout.close()
     os.chdir(savedPath)
     return HttpResponse('{"success":true}', content_type="application/json")
   
