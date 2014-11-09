@@ -135,7 +135,7 @@ def gitAdd(request):
     for x in files:
         filename = x.replace('"','').replace('[','').replace(']','')
         command('git add ' + filename)
-    command('git commit -m "' + msg + '"')
+    command('git commit -m "%s"'%msg)
     os.chdir(savedPath)
     return HttpResponse('{"success":true}', content_type="application/json")
   
