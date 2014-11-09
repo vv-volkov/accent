@@ -19,4 +19,7 @@ urlpatterns = [
     url(r'^gitAdd',views.gitAdd),
     url(r'^gitmodified',views.gitmodified),
     url(r'^gitPush',views.gitPush),
+    url(r'^databases',views.databases),
+    url(r'^databaseparams',views.databaseparams),
+    url(r'^testconnection',views.testconnection),  
 ]

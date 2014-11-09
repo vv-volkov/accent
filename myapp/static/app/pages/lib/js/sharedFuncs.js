@@ -14,6 +14,7 @@ function createTabIframe(me,src,txt){
     }
     var newTab=topTab.add({'title':txt,'closable':true,'layout':'fit',src:params['filename'],contentEl:iframe});
     topTab.setActiveTab(newTab);
+    return newTab;
 }
 function ajaxRequest(url,method,args,callback){
     Ext.Ajax.request({

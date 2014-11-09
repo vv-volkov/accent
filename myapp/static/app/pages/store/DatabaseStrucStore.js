@@ -1,0 +1,14 @@
+Ext.define('databases.store.DatabaseStrucStore',{
+    extend:'Ext.data.TreeStore',
+    model:'databases.model.DatabaseStrucModel',
+    autoLoad:true,
+    proxy:{
+        type:'ajax',
+        url:'/static/app/json/databases.json'
+    },
+    root:{
+        text:'',
+        expanded:true,
+        id:'src'
+    }
+})

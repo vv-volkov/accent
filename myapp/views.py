@@ -7,11 +7,13 @@ from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt
 from subprocess import *
 
+
 import os
 import json
 import codecs
 import shutil
 import string
+import pyodbc
 
 repoDir = '.'
 
@@ -144,8 +146,8 @@ def gitmodified(request):
     status = command('git status --short').split('\n')
     output = []
     for x in status:
-        if x != '' and ( x.startswith(' M ') or x.startswith('MM ') or x.startswith('M ') or x.startswith('M  ')):
-            output.append({'filename':x.replace('MM ','').replace(' M ','').replace('M ','').replace('M  ','')})  
+        if x != '' and ( x.startswith(' M ') or x.startswith('MM ') or x.startswith('M ') or x.startswith('M  ') or x.startswith('?? ')):
+            output.append({'filename':x.replace('MM ','').replace(' M ','').replace('M ','').replace('M  ','').replace('?? ','')})  
     os.chdir(savedPath)
     return HttpResponse([output])
   
@@ -156,8 +158,19 @@ def gitPush(request):
     os.chdir(savedPath)
     return HttpResponse()
   
+def databases(request):
+    template = loader.get_template('myapp/databases.html')
+    context = RequestContext(request,{})
+    return HttpResponse(template.render(context))
   
+def databaseparams(request):
+    return HttpResponse()
   
+@csrf_exempt
+def testconnection(request):
+    cnx = pyodbc.connect("DRIVER=FreeTDS;SERVER=192.168.56.1;PORT=1433;DATABASE=test;UID=sa;PWD=pGOKTOXrO2k;TDS_Version=7.0;ClientCharset=UTF8;")
+    return HttpResponse('{"success":true}', content_type="application/json")
+    
   
   
   

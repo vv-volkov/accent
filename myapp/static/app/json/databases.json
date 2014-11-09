@@ -1,0 +1,1 @@
+[{"text":"MSSQL Server 2012","id":"1","id_parent":"0","leaf":false,"children":{"text":"Property_MinGosIm","server":"192:168.56.1","database":"test","port":"1433","user":"sa","password":"pGOKTOXrO2k","id":"2","id_parent":"1","leaf":true}}]
