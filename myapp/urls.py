@@ -22,4 +22,6 @@ urlpatterns = [
     url(r'^databases',views.databases),
     url(r'^databaseparams',views.databaseparams),
     url(r'^testconnection',views.testconnection),  
+    url(r'^databasetables',views.databasetables),   
+    url(r'^databasetablelist',views.databasetablelist),
 ]

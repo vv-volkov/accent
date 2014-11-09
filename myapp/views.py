@@ -168,9 +168,22 @@ def databaseparams(request):
   
 @csrf_exempt
 def testconnection(request):
-    cnx = pyodbc.connect("DRIVER=FreeTDS;SERVER=192.168.56.1;PORT=1433;DATABASE=test;UID=sa;PWD=pGOKTOXrO2k;TDS_Version=7.0;ClientCharset=UTF8;")
+    cnx = pyodbc.connect("DRIVER=FreeTDS;SERVER=192.168.56.1;PORT=1433;DATABASE=Property_MinGosIm;UID=sa;PWD=pGOKTOXrO2k;TDS_Version=7.0;ClientCharset=UTF8;")
     return HttpResponse('{"success":true}', content_type="application/json")
-    
+  
+def databasetables(request):
+    template = loader.get_template('myapp/databasetables.html')
+    context = Context()
+    return HttpResponse(template.render(context))
+  
+def databasetablelist(request):
+    cnx = pyodbc.connect("DRIVER=FreeTDS;SERVER=192.168.56.1;PORT=1433;DATABASE=Property_MinGosIm;UID=sa;PWD=pGOKTOXrO2k;TDS_Version=7.0;")
+    cursor = cnx.cursor()
+    cursor.execute("SELECT distinct TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG='Property_MinGosIm';")
+    output = []
+    for x in cursor:
+        output.append({'table':x[0]})
+    return HttpResponse(json.dumps(output))
   
   
   

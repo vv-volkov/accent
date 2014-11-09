@@ -10,14 +10,14 @@ Ext.define('databases.view.DatabaseStrucView',{
             enableDrag:true
         },
         listeners:{
-            itemcontextmenu : function(view, r, node, index, e) {
+            itemcontextmenu: function(view, r, node, index, e) {
                 e.stopEvent();
                 if(r.get('leaf')){
                     Ext.create('Ext.menu.Menu', {
                         items:[{
                             text:'Параметры',
                             handler:function(){
-                                var tab=createTabIframe(view,'databaseparams/',r.get('text')),
+                                var tab=createTabIframe(view,'databaseparams/',r.get('text')+' :: Параметры'),
                                 frm=new Ext.create('Ext.form.Panel',{
                                     bodyStyle:'padding:4px',
                                     border:false,
@@ -78,11 +78,19 @@ Ext.define('databases.view.DatabaseStrucView',{
                                 tab.add(frm)
                             }
                         },{
-                            text:'Таблицы'
+                            text:'Таблицы',
+                            handler:function(){
+                                var tab=createTabIframe(view,'databasetables/',r.get('text')+' :: Таблицы');
+                            }
                         }]
                     }).showAt(e.getXY());
                }
                return false;
+            },
+            itemclick:function(view, r, node, index, e){
+                if(r.get('leaf')){
+                    var tab=createTabIframe(view,'databasetables/',r.get('text')+' :: Таблицы');
+                }
             }
         }
     },
