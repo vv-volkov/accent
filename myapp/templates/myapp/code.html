@@ -8,6 +8,7 @@
     <script type="text/javascript" src="/static/app/pages/lib/js/codemirror-4.7/mode/css/css.js"></script>
     <script type="text/javascript" src="/static/app/pages/lib/js/codemirror-4.7/mode/python/python.js"></script>
     <script type="text/javascript" src="/static/app/pages/lib/js/codemirror-4.7/mode/fortran/fortran.js"></script>
+    <script type="text/javascript" src="/static/app/pages/lib/js/codemirror-4.7/mode/sql/sql.js"></script>
     <script type="text/javascript" src="/static/app/pages/lib/js/codemirror-4.7/mode/htmlmixed/htmlmixed.js"></script>
     <script type="text/javascript" src="/static/app/pages/lib/js/codemirror-4.7/addon/display/fullscreen.js"></script>
   </head>
@@ -17,7 +18,7 @@
     <script type="text/javascript">
         var cm=CodeMirror.fromTextArea(document.getElementById("code"),{
             lineNumbers:true,
-            fullScreen:true,
+            fullScreen:true, 
             mode:"{{mode}}"
         });
         function getCodeMirrorValue(){
@@ -29,5 +30,3 @@
     </script>
   </body>
 </html>
-
-

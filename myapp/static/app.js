@@ -1,4 +1,3 @@
-/* Hi there */
 Ext.Loader.setConfig({enabled:true, disableCaching:true});
 
 Ext.Loader.setPath('Ext.ux','/static/ext-5.0.1/examples/ux');

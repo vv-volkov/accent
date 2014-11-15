@@ -77,7 +77,7 @@ Ext.define('dynamics.view.FolderStrucView',{
             menu:{
                 xtype:'menu',
                 items:[{
-                    text:'Текущий модуль',
+                    text:'Текущий проект',
                     itemId:'refreshCurrent'
                 },{
                     text:'Вся система',

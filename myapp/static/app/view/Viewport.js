@@ -1,4 +1,3 @@
-/* Стартовый вид системы */
 Ext.define('myapp.view.Viewport',{
     extend:'Ext.container.Viewport',
     layout:'fit',
@@ -37,7 +36,15 @@ Ext.define('myapp.view.Viewport',{
                             icon:'/static/app/img/refresh.png',
                             handler:function(){
                                 var tab=Ext.ComponentQuery.query('#topTab')[0].getActiveTab();
-                                if(tab.src||tab.contentEl) tab.contentEl.contentDocument.location.reload(true);                                     }
+                                if(tab.src||tab.contentEl) tab.contentEl.contentDocument.location.reload(true);                                     
+                            }
+                        },{
+                            text:'Во весь экран',
+                            icon:'/static/app/img/fullscreen.png',
+                            handler:function(){
+                                //var tab=Ext.ComponentQuery.query('#topTab')[0].getActiveTab();
+                                //if(tab.src||tab.contentEl) tab.contentEl.contentDocument.location.reload(blank);  
+                            }
                         }]
                     })
                 ]                

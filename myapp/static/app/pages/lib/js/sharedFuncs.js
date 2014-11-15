@@ -1,4 +1,4 @@
-function createTabIframe(me,src,txt){
+function createTabIframe(me,src,txt,icon,iconCls){
     var topTab=me.up('viewport').down('tabpanel'),
     query=src.substring(src.indexOf('?')+1).split('&'),
     params={},
@@ -12,7 +12,7 @@ function createTabIframe(me,src,txt){
         temp=query[i].split('=');
         params[temp[0]]=temp[1]
     }
-    var newTab=topTab.add({'title':txt,'closable':true,'layout':'fit',src:params['filename'],contentEl:iframe});
+    var newTab=topTab.add({'title':txt,'icon':(icon!=undefined)?icon:'','iconCls':(iconCls!=undefined)?iconCls:'','closable':true,'layout':'fit',src:params['filename'],contentEl:iframe});
     topTab.setActiveTab(newTab);
     return newTab;
 }
@@ -21,7 +21,7 @@ function ajaxRequest(url,method,args,callback){
         url:url,
         method:method,
         success:function(res,req){
-            if(callback!=undefined)callback(args);
+            if(callback!=undefined)callback(args,res);
         }
     });
 }
@@ -50,7 +50,7 @@ function createFileFolder(me,tp){
               }
               id_parent=id;
               id+='/'+txt;
-              var newNode={'text':txt,'id':id,'id_parent':id_parent,'leaf':((tp==1)?true:false)},
+              var newNode={'text':txt,'id':id,'iconCls':fileextension(txt),'id_parent':id_parent,'leaf':((tp==1)?true:false)},
               args={'node':node,'newNode':newNode};
               ajaxRequest('/myapp/create'+((tp==1)?'File/':'Folder/')+'?filename='+id,'GET',args,function(){
                   args['node'].insertBefore(args['newNode'],args['node'].firstChild);
@@ -157,10 +157,179 @@ function doGitPush(me){
 function doGitPull(me,txt){
     ajaxRequest('/myapp/gitPull/','GET',{},function(){});
 }
-
-
-
-
-
-
-
+function createWindowFormAction(parentObj,offset,txt,dbObj,args,icon,method,saveBtn,callbackcreate,callbacksave){
+    var width=parentObj.height*1.6;
+    Ext.create('Ext.window.Window',{
+        title:txt,
+        width:width,
+        height:parentObj.height,
+        modal:true,
+        closable:true,
+        items:[],
+        layout:'fit',
+	    icon:(icon&&(icon!=undefined))?icon:'',
+        itemId:'openWindow',
+        listeners:{
+            render:function(){
+                //Если не статическая форма, а объект БД
+                var me=this;
+                if(dbObj){
+                    Ext.Ajax.request({
+                        url:'/myapp/getDbObj/',
+                        method:'POST',
+                        params:args,
+                        success:function(res,req){
+                            var json=Ext.decode(res.responseText,1);                            
+                            Ext.Ajax.request({
+                                url:'/myapp/matchvals/?table='+args['table'],
+                                method:'GET',
+                                success:function(res,req){
+                                    var vals=Ext.decode(res.responseText,1);
+                                    frm=Ext.create('Ext.form.Panel',{
+                                        border:false,
+                                        bodyStyle:'padding:4px;background:url(/static/app/img/bgo.png)',
+                                        autoScroll:true,
+                                        defaults:{
+                                            anchor:'100%'
+                                        },
+                                       items:json,
+                                       itemId:'openForm',
+                                       submitEmptyText:false,
+                                       standardSubmit:false,
+                                       listeners:{
+                                           beforerender:function(){
+                                               callbackcreate();
+                                               rendercard(this);  
+                                               if(vals&&vals!=""&&vals!=null){
+                                                   this.getForm().setValues(JSON.parse(vals));
+                                                   //alert();
+                                               }
+                                          }
+                                       }
+                                   });
+                                   me.add(frm); 
+                                }
+                            });
+                            
+                        }
+                    });
+                }
+            }
+        },
+        buttons:[{
+            text:'Сохранить',
+            icon:'/static/app/img/save.png',
+            handler:function(){
+                callbacksave()
+            },
+            listeners:{
+                render:function(){
+                    if(!saveBtn) this.destroy();
+                }
+            }
+        },{
+            text:'Закрыть',
+            icon:'/static/app/img/close.png',
+            handler:function(){
+                this.up('window').destroy();
+            }
+        }]
+    }).show();
+}
+function fileextension(filename){
+    return filename.substring(filename.lastIndexOf('.')+1)
+}
+function rendercard(frm){
+    frm.suspendLayouts();
+    var i=0;
+    frm.getForm().getFields().each(function(field){
+        if(!field.hidden){
+            if((i%2)==0)field.addCls('formnostripe')
+            else field.addCls('formstripe')
+            i++;
+        }
+    });
+    frm.resumeLayouts();
+}
+function formSubmit(items,url,callback){
+    var frm=Ext.create('Ext.form.Panel',{
+            method:'POST',
+            standardSubmit:false,
+            items:items
+         });                               
+    frm.getForm().submit({url:url,success:function(form,action){
+        callback()
+    }});
+}
+function getTableFields(items,query,url,panel,callback){
+    var frm=Ext.create('Ext.form.Panel',{
+            method:'POST',
+            standardSubmit:false,
+            items:items
+         });                               
+    frm.getForm().submit({url:url,success:function(form,action){
+        panel.items.each(function(item){
+            item.destroy();
+        });
+        Ext.create('Ext.data.JsonStore',{
+            autoLoad:true,
+            storeId:'gridtable',
+            fields:action.result.message,
+            //leadingBufferZone:300,
+            //pageSize:100,
+            proxy:{
+                type:'ajax',
+                url:'/myapp/dynamicdatatable/',
+                actionMethods:{
+                    read:'POST'
+                },
+                reader:{
+                    type:'json',
+                    root:'items',
+                    totalProperty:'total'
+                },
+                extraParams:{query:query}
+            }
+        }); 
+        var grid=Ext.create('Ext.grid.Panel',{
+            border:false,
+            store:Ext.data.StoreManager.lookup('gridtable'),
+            columns:action.result.message,
+            columnLines:true,
+            selModel:Ext.create('Ext.selection.CheckboxModel',{mode:'MULTI'})
+        });
+        panel.add(grid);
+    }});
+}
+function savecontent(if_alert,callback){
+    var cw=document.getElementById("iframedata").contentWindow,
+    val=cw.getCodeMirrorValue(),
+    path=cw.getPath(),
+    items=[{xtype:'textarea',name:'sourcecode',value:val},{xtype:'textfield',name:'path',value:path}];
+    formSubmit(items,'/myapp/saveSourceCode',function(){
+        if(if_alert) Ext.MessageBox.show({
+            title:'Внимание',
+            msg:'Действия выполнены',
+            closable:true,
+            buttons:Ext.Msg.OK
+        });
+        callback();
+    });
+}
+function compilefortran(path,p){
+    var mymask=new Ext.LoadMask({msg:'Выполняется компиляция',target:p});
+    mymask.show();
+    Ext.Ajax.request({
+        url:'/myapp/compilefortran/?path='+path,
+        method:'GET',
+        success:function(res,req){
+            mymask.destroy();   
+            Ext.MessageBox.show({
+                title:'Внимание',
+                msg:'Компиляция завершена',
+                closable:true,
+                buttons:Ext.Msg.OK
+            });
+        }
+    });
+}

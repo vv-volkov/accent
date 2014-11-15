@@ -16,7 +16,7 @@ Ext.define('dynamics.controller.FolderStrucController',{
                             }
                             i++;
                         });
-                        if(flag) createTabIframe(view,'/myapp/loadcontenttotab/?filename='+rec.get('id'),rec.get('text'));
+                        if(flag) createTabIframe(view,'/myapp/loadcontenttotab/?filename='+rec.get('id'),rec.get('text'),'',rec.get('iconCls'));
                     }
                 },
                 itemmove:function(item,oldParent,newParent,index,eOpts){

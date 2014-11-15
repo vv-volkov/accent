@@ -82,6 +82,16 @@ Ext.define('databases.view.DatabaseStrucView',{
                             handler:function(){
                                 var tab=createTabIframe(view,'databasetables/',r.get('text')+' :: Таблицы');
                             }
+                        },{
+                            text:'Инструкции',
+                            handler:function(){
+                            
+                            }
+                        },{
+                            text:'Создать запрос',
+                            handler:function(){
+                                var tab=createTabIframe(view,'databasequery/',r.get('text')+' :: Запрос','/static/app/img/sql.png');   
+                            }
                         }]
                     }).showAt(e.getXY());
                }

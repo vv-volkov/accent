@@ -1,0 +1,1 @@
+"INSERT INTO users (attr_2_, attr_1_) values (1, 2)"

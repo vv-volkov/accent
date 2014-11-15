@@ -3,6 +3,9 @@ Ext.define('dynamics.view.DynamicsProgramView',{
     alias:'widget.dynamicsprog',
     layout:'border',
     border:false,
+    defaults:{
+        border:false
+    },
     items:[{
         region:'west',
         xtype:'panel',
@@ -13,7 +16,6 @@ Ext.define('dynamics.view.DynamicsProgramView',{
         split:true,
         layout:'border',
         defaults:{
-            border:false,
             autoScroll:true,
             collapsible:true,
             height:'50%'
@@ -88,5 +90,3 @@ Ext.define('dynamics.view.DynamicsProgramView',{
         width:'60%'
     }]
 })
-
-

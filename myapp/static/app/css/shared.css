@@ -1,0 +1,43 @@
+.js{
+    background-image:url("/static/app/img/code_javascript_16.png");
+}
+.py, .pyc{
+    background-image:url("/static/app/img/code_python.png");
+}
+.f90{
+    background-image:url("/static/app/img/code_fortran.png");
+}
+.html{
+    background-image:url("/static/app/img/explorer.png");
+}
+.sql{
+    background-image:url("/static/app/img/sql.png");
+}
+.gif{
+    background-image:url("/static/app/img/gif.png");
+}
+.jpeg{
+    background-image:url("/static/app/img/jpg.png");
+}
+.png{
+    background-image:url("/static/app/img/png.png");
+}
+.css{
+    background-image:url("/static/app/img/css.png");
+}
+.x-fieldset-default {
+    border-radius: 0;
+}
+.formstripe{
+    background-color:#EEEEEE !important;
+    border:1px dotted #D0D0D0 !important;
+    padding:4px !important;
+}
+.formnostripe{
+    padding:4px !important;
+}
+.centered{
+  position:absolute;
+  top:50%;
+  left:50%;
+}

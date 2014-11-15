@@ -1,6 +1,7 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="/static/ext-5.0.1/packages/ext-theme-classic/build/resources/ext-theme-classic-all.css">
+    <link rel="stylesheet" type="text/css" href="/static/app/css/shared.css" />
     <script type="text/javascript" src="/static/ext-5.0.1/build/ext-all.js"></script>
     <script type="text/javascript" src="/static/ext-5.0.1/build/packages/ext-locale/build/ext-locale-ru.js"></script>    
     <script type="text/javascript" src="/static/app/pages/lib/js/sharedFuncs.js"></script>
@@ -16,32 +17,18 @@
                    region:'center',
                    layout:'fit',
                    border:false,
-                   html:'<iframe id="iframedata" src="/myapp/code/?filename={{path}}" frameborder="0" scrolling="0" style="border:0px none;width:100%;height:100%"></iframe>',                   
+                   html:'<img src="{{static}}{{filename}}" class="centered" />',                   
                    dockedItems:[{
                        xtype:'toolbar',
                        items:[{
                            xtype:'button',
                            icon:'/static/app/img/save.png',
                            tooltip:'Сохранить',
+                           disabled:true,
                            handler:function(){                               
                                savecontent(true,function(){});
                            }
-                       },'-',{
-                           xtype:'button',
-                           icon:'/static/app/img/compile.png',
-                           tooltip:'Компилировать',
-                           handler:function(){
-                               var me=this;
-                               savecontent(false,function(){
-                                  compilefortran("{{path}}",me.up('toolbar').up('panel'))
-                               });
-                           },
-                           listeners:{
-                               beforerender:function(){
-                                   if("{{ext}}"!='.f90')this.destroy();
-                               }
-                           }
-                       }]
+                       },'-']
                    }]
                }]
            });

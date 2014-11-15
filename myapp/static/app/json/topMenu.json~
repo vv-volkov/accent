@@ -1,1 +1,0 @@
-[{"xtype":"button","text":"Динамические системы","scale":"large","padding":"2 0 2 0","width":"140","arrowAlign":"bottom","icon":"/static/app/img/gauge_32.png","iconAlign":"top","menu":[{"text":"Осциллятор Ван-дер-Поля","url":"dynamics",handler:function(){addTopTab(this)}}]}]
