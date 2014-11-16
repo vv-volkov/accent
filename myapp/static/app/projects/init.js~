@@ -5,8 +5,8 @@ Ext.Loader.setPath('Ext.ux','/static/ext-5.0.1/examples/ux');
 Ext.require(['Ext.ux.TabReorderer','Ext.ux.BoxReorderer','Ext.ux.TabCloseMenu']);
 
 Ext.application({
-    name:'dynamics',
-    appFolder:'/static/app/pages',
+    name:'init',
+    appFolder:'/static/app/projects/dynamicsproj/',
     requires:[
         'Ext.container.Viewport',
         'Ext.layout.container.Border'
@@ -61,10 +61,7 @@ Ext.application({
                     icon:'/static/app/img/run.png',
                     layout:'fit',
                     border:false,
-                    items:[{
-                        xtype:'dynamicsprog',
-                        border:false
-                    }]
+                    html:'<iframe src="/myapp/program/?program=dynamics" frameborder="0" scrolling="0" style="border:0px none;width:100%;height:100%"></iframe>'
                 }]
             }]
         });

@@ -1,4 +1,4 @@
-Ext.define('dynamics.view.FolderStrucView',{
+Ext.define('init.view.FolderStrucView',{
     extend:'Ext.tree.Panel',
     store:'FolderStrucStore',
     alias:'widget.foldertree',
@@ -77,7 +77,7 @@ Ext.define('dynamics.view.FolderStrucView',{
             menu:{
                 xtype:'menu',
                 items:[{
-                    text:'Текущий проект',
+                    text:'Программы',
                     itemId:'refreshCurrent'
                 },{
                     text:'Вся система',

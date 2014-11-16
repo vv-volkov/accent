@@ -17,7 +17,13 @@ import pyodbc
 import pypyodbc
 import jsonpickle
 import MySQLdb
-import myapp.static.app.pages.lib.fortran.test
+import StringIO
+import base64
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+
 
 repoDir = '.'
 
@@ -26,9 +32,10 @@ def index(request):
     context = RequestContext(request,{})
     return HttpResponse(template.render(context))
 
-def dynamics(request):
-    template = loader.get_template('myapp/dynamics.html')
-    context = RequestContext(request,{})
+def projects(request):
+    program = request.GET['program']
+    template = loader.get_template('myapp/projects.html')
+    context = Context({'program':program})
     return HttpResponse(template.render(context))
 
 def path_to_dict(path):
@@ -403,6 +410,28 @@ def givens(request):
     template = loader.get_template('myapp/givens.html')
     context = RequestContext(request,{})
     return HttpResponse(template.render(context))
+  
+def program(request):
+    program = request.GET['program']
+    template = loader.get_template('myapp/program.html')
+    context = Context({'program':program})
+    return HttpResponse(template.render(context))
+  
+def lineCurve2D(request):
+    x = np.linspace(-10, 10, 50)
+    y = np.linspace(-10, 10, 50)
+    (x,y) = np.meshgrid(x, y)
+    z = x**2 + 3*y**2 + x*y - 5*x + 3*y
+    fig = plt.figure()
+    #canvas = FigureCanvas(fig)
+    #ax = fig.add_subplot(1,1,1)
+    #ax = plt.contour(x,y,z)
+    #out = StringIO.StringIO()
+    #canvas.print_png(out)
+    #res = base64.b64encode(out.getvalue())
+    #obj = {'src':res}   
+    return HttpResponse()
+    #return HttpResponse(json.dumps(obj), content_type="application/json")
   
   
 

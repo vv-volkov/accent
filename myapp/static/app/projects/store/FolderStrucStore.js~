@@ -14,6 +14,6 @@ Ext.define('dynamics.store.FolderStrucStore',{
     root:{
         text:'',
         expanded:true,
-        id:'./myapp/static/app/pages'
+        id:'./myapp/static/app/projects/dynamicsproj/'
     }
 })

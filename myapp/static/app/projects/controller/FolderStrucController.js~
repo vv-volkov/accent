@@ -1,4 +1,4 @@
-Ext.define('dynamics.controller.FolderStrucController'',{
+Ext.define('init.controller.FolderStrucController',{
     extend:'Ext.app.Controller',
     models:['FolderStrucModel'],
     stores:['FolderStrucStore'],
@@ -16,8 +16,12 @@ Ext.define('dynamics.controller.FolderStrucController'',{
                             }
                             i++;
                         });
-                        if(flag) createTabIframe(view,'/myapp/loadcontenttotab/?filename='+rec.get('id'),rec.get('text'));
+                        if(flag) createTabIframe(view,'/myapp/loadcontenttotab/?filename='+rec.get('id'),rec.get('text'),'',rec.get('iconCls'));
                     }
+                },
+                itemmove:function(item,oldParent,newParent,index,eOpts){
+                    if(item.get('id_parent')!=newParent.get('id'))
+                        moveFileFolder(item.get('id'),newParent.get('id'),item.get('text'));
                 }
             },
             'foldertree button[itemId=refresh]':{
@@ -46,6 +50,20 @@ Ext.define('dynamics.controller.FolderStrucController'',{
             },
             'foldertree menuitem[itemId=refreshAll]':{
                 click:this.refreshAll
+            },           
+            'foldertree menuitem[itemId=gitStatus]':{
+                click:this.gitStatus
+            },
+            'foldertree menuitem[itemId=gitPush]':{
+                click:this.gitPush
+            },
+            'foldertree menuitem[itemId=gitPull]':{
+                click:this.gitPull
+            },
+            'foldertree menu':{
+                mouseleave:function(menu){
+                    menu.hide();
+                }
             }
         });
     },
@@ -72,21 +90,22 @@ Ext.define('dynamics.controller.FolderStrucController'',{
     },
     refreshCurrent:function(menuitem){
         var treeStore=menuitem.up('button').up('panel').store,
-        node={expanded:true,id:'./myapp/static/app/pages'};
+        node={expanded:true,id:'./myapp/static/app/projects/dynamicsproj/'};
         reloadFolderTree(treeStore,node);
     },
     refreshAll:function(menuitem){
         var treeStore=menuitem.up('button').up('panel').store,
         node={expanded:true,id:'./myapp/'};
         reloadFolderTree(treeStore,node);
+    },
+    gitStatus:function(menuitem){
+        doGitStatus(menuitem,menuitem.text);
+    },
+    gitPush:function(menuitem){
+        doGitPush(menuitem);
+    },
+    gitPull:function(menuitem){
+        doGitPull(menuitem);
     }
-     
-
-
-
-
-
-})
-
-
+});
 

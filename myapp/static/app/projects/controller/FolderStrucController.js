@@ -1,8 +1,8 @@
-Ext.define('dynamics.controller.FolderStrucController',{
+Ext.define('init.controller.FolderStrucController',{
     extend:'Ext.app.Controller',
     models:['FolderStrucModel'],
     stores:['FolderStrucStore'],
-    views:['FolderStrucView','DynamicsProgramView'],
+    views:['FolderStrucView'],
     init:function(){
         this.control({
             'foldertree':{
@@ -90,7 +90,7 @@ Ext.define('dynamics.controller.FolderStrucController',{
     },
     refreshCurrent:function(menuitem){
         var treeStore=menuitem.up('button').up('panel').store,
-        node={expanded:true,id:'./myapp/static/app/pages'};
+        node={expanded:true,id:'./myapp/static/app/projects/'};
         reloadFolderTree(treeStore,node);
     },
     refreshAll:function(menuitem){

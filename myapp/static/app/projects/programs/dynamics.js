@@ -1,6 +1,6 @@
-Ext.define('dynamics.view.DynamicsProgramView',{
+Ext.define('dynamics.view.DynamicsViewport',{
     extend:'Ext.form.Panel',
-    alias:'widget.dynamicsprog',
+    alias:'widget.dynamics',
     layout:'border',
     border:false,
     defaults:{

@@ -37,7 +37,13 @@
     padding:4px !important;
 }
 .centered{
-  position:absolute;
-  top:50%;
-  left:50%;
+    position:absolute;
+    top:50%;
+    left:50%;
+}
+.truncate{
+    white-space:nowrap !important;
+    text-overflow:ellipsis !important;
+    overflow:hidden !important;
+    cursor:pointer !important;
 }
