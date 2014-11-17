@@ -333,20 +333,39 @@ function compilefortran(path,p){
         }
     });
 }
-function lineCurve2D(me){
+function lineCurve2D(me,tp){
+    if(tp==1) var plotId='#LineCurve2D';
+    else if(tp==2) var plotId='#Surface3D';
+    var mymask=new Ext.LoadMask({msg:'Происходит построение...',target:me.down(plotId)});
+    mymask.show();
     Ext.Ajax.request({
-        url:'/myapp/lineCurve2D',
+        url:'/myapp/lineCurve2D/?tp='+tp,
         method:'GET',
-        success:function(res,req){
+        success:function(res,req){            
             var image = Ext.decode(res.responseText,1),
-            plot=me.down('#LineCurve2D');
+            plot=me.down(plotId);
             plot.items.each(function(el){
                 el.destroy();
             });
-            var wd=me.down('#LineCurve2D').getWidth()-20,
-                ht=me.down('#LineCurve2D').getHeight()-20;
-            plot.add({xtype:'panel',height:ht,wisth:wd, html:'<img src="data:image/png;base64, '+image.src+'" width="'+wd+'px" height="'+ht+'px" style="width:'+wd+'px;height:'+ht+'px"/>'});
-         
+            var wd=me.down(plotId).getWidth()-20,
+                ht=me.down(plotId).getHeight()-20;
+            plot.add({xtype:'panel',height:ht,wisth:wd, html:'<img src="data:image/png;base64, '+image.src+'" width="'+wd+'px" height="'+ht+'px" style="width:'+wd+'px;height:'+ht+'px"/>'});         
+            mymask.destroy();
         }
     });
 }
+function optimize(me){
+    alert(me.down('#x0').getValue()+' '+me.down('#y0').getValue()+' '+me.down('#delta').getValue()+' '+me.down('#theta').getValue())
+    /*var mymask=new Ext.LoadMask({msg:'Происходит построение...',target:me.down('#Map2D')});
+    mymask.show();
+    Ext.Ajax.request({
+        url:'/myapp/optimize/',
+        method:'GET',
+        success:function(res,req){
+            alert(res.responseText)  
+        }
+    });*/
+}
+
+
+

@@ -23,6 +23,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
+import myapp.static.app.shared.fortran.fortran as fort
 
 
 repoDir = '.'
@@ -418,21 +421,35 @@ def program(request):
     return HttpResponse(template.render(context))
   
 def lineCurve2D(request):
+    tp = request.GET['tp']
     x = np.linspace(-10, 10, 50)
     y = np.linspace(-10, 10, 50)
-    (x,y) = np.meshgrid(x, y)
+    x,y = np.meshgrid(x, y)
     z = x**2 + 3*y**2 + x*y - 5*x + 3*y
     fig = plt.figure()
-    #canvas = FigureCanvas(fig)
-    #ax = fig.add_subplot(1,1,1)
-    #ax = plt.contour(x,y,z)
-    #out = StringIO.StringIO()
-    #canvas.print_png(out)
-    #res = base64.b64encode(out.getvalue())
-    #obj = {'src':res}   
+    if (tp == "1"):
+        ax = fig.add_subplot(111)
+        plt.contour(x,y,z,20)
+        ax.set_xlabel("X")
+        ax.set_ylabel("Y")
+    elif (tp == "2"):
+        ax = fig.add_subplot(111,projection='3d')
+        ax.plot_surface(x,y,z,rstride=2,cstride=2,cmap=cm.jet)
+        ax.set_xlabel("X")
+        ax.set_ylabel("Y")
+        ax.set_zlabel("Z")
+    canvas = FigureCanvas(fig) 
+    out = StringIO.StringIO()
+    canvas.print_png(out)
+    res = base64.b64encode(out.getvalue())
+    obj = {'src':res}
+    plt.close(fig)
+    return HttpResponse(json.dumps(obj), content_type="application/json")  
+  
+def optimize(request):
+    x0 = request.GET['x0']
+    y0 = request.GET['y0']
+    delta = request.GET['delta']
+    theta = request.GET['theta']
+    fort.graddescent(x_k, y_k, delta, theta)
     return HttpResponse()
-    #return HttpResponse(json.dumps(obj), content_type="application/json")
-  
-  
-
-  

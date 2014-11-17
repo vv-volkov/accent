@@ -37,5 +37,6 @@ urlpatterns = [
     url(r'^compilefortran/',views.compilefortran), 
     url(r'^givens/',views.givens),
     url(r'^program/',views.program), 
-    url(r'^lineCurve2D/',views.lineCurve2D),
+    url(r'^lineCurve2D/',views.lineCurve2D), 
+    url(r'^optimize/',views.optimize),
 ]

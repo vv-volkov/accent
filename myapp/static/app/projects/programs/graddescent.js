@@ -43,11 +43,13 @@ Ext.define('graddescent.view.GraddescentViewport',{
                 },{
                     xtype:'numberfield',
                     columnWidth:'0.8',
-                    value:'2'
+                    value:'2',
+                    itemId:'x0'
                 },{
                     xtype:'label',
                     contentEl:'y0',
-                    columnWidth:'0.2'
+                    columnWidth:'0.2',
+                    itemId:'y0'
                 },{
                     xtype:'numberfield',
                     columnWidth:'0.8',
@@ -55,7 +57,8 @@ Ext.define('graddescent.view.GraddescentViewport',{
                 },{
                     xtype:'label',
                     contentEl:'delta',
-                    columnWidth:'0.2'
+                    columnWidth:'0.2',
+                    itemId:'delta'
                 },{
                     xtype:'numberfield',
                     columnWidth:'0.8',
@@ -63,7 +66,8 @@ Ext.define('graddescent.view.GraddescentViewport',{
                 },{
                     xtype:'label',
                     contentEl:'theta',
-                    columnWidth:'0.2'
+                    columnWidth:'0.2',
+                    itemId:'theta'
                 },{
                     xtype:'numberfield',
                     columnWidth:'0.8',
@@ -97,7 +101,9 @@ Ext.define('graddescent.view.GraddescentViewport',{
                     text:'Решить',
                     icon:'/static/app/img/check.png',
                     handler:function(){
-                        lineCurve2D(this.up('toolbar').up('viewport'))
+                        lineCurve2D(this.up('toolbar').up('viewport'),1);
+                        lineCurve2D(this.up('toolbar').up('viewport'),2);
+                        optimize(this.up('toolbar').up('viewport'));
                     }
                 },{
                     xtype:'button',
@@ -124,22 +130,63 @@ Ext.define('graddescent.view.GraddescentViewport',{
             title:'Линии уровня (2D)',
             columnWidth:'0.5',
             itemId:'LineCurve2D',           
-            height:'50%'
+            height:'45%'
         },{
             xtype:'fieldset',
-            title:'Линии уровня (3D)',
+            title:'Поверхность (3D)',
             columnWidth:'0.5',
-            height:'50%'
+            itemId:'Surface3D',
+            height:'45%'
         },{
             xtype:'fieldset',
             title:'Градиентный спуск',
             columnWidth:'0.5',
-            height:'50%'
+            height:'50%',
+            itemId:'Map2D',
         },{
             xtype:'fieldset',
             title:'Результат',
             columnWidth:'0.5',
-            height:'50%'
+            height:'50%',
+            //bodyStyle:'padding:4px;',
+            layout:'column',
+            defaults:{
+                margin:'2 0 2 0'
+            },
+            items:[{
+                xtype:'label',
+                contentEl:'xstar',
+                columnWidth:'0.2'
+            },{
+                xtype:'numberfield',
+                columnWidth:'0.8',
+                allowDecimals:true,
+                decimalPrecision:10,
+                itemId:'xstar',
+                readOnly:true
+            },{
+                xtype:'label',
+                contentEl:'ystar',
+                columnWidth:'0.2'
+            },{
+                xtype:'numberfield',
+                columnWidth:'0.8',
+                allowDecimals:true,
+                decimalPrecision:10,
+                itemId:'ystar',
+                readOnly:true
+            },{
+                xtype:'label',
+                contentEl:'qstar',
+                columnWidth:'0.2'
+            },{
+                xtype:'numberfield',
+                columnWidth:'0.8',
+                allowDecimals:true,
+                decimalPrecision:10,
+                itemId:'qstar',
+                readOnly:true
+            }]
         }]
     }]
 })
