@@ -355,16 +355,27 @@ function lineCurve2D(me,tp){
     });
 }
 function optimize(me){
-    alert(me.down('#x0').getValue()+' '+me.down('#y0').getValue()+' '+me.down('#delta').getValue()+' '+me.down('#theta').getValue())
-    /*var mymask=new Ext.LoadMask({msg:'Происходит построение...',target:me.down('#Map2D')});
+    var x0=me.down('#x0').getValue(),y0=me.down('#y0').getValue(),
+        delta=me.down('#delta').getValue(),theta=me.down('#theta').getValue(),
+        method=me.down('#method').getValue();
+    var mymask=new Ext.LoadMask({msg:'Происходит построение...',target:me.down('#Map2D')});
     mymask.show();
     Ext.Ajax.request({
-        url:'/myapp/optimize/',
+        url:'/myapp/optimize/?x0='+x0+'&y0='+y0+'&delta='+delta+'&theta='+theta+'&method='+method,
         method:'GET',
         success:function(res,req){
-            alert(res.responseText)  
+            var image = Ext.decode(res.responseText,1),
+            plot=me.down('#Map2D');
+            plot.items.each(function(el){
+                el.destroy();
+            });
+            var wd=me.down('#Map2D').getWidth()-20,
+                ht=me.down('#Map2D').getHeight()-20;
+            plot.add({xtype:'panel',height:ht,wisth:wd, html:'<img src="data:image/png;base64, '+image.src+'" width="'+wd+'px" height="'+ht+'px" style="width:'+wd+'px;height:'+ht+'px"/>'});         
+            mymask.destroy();
+            me.down('form').getForm().setValues(image)
         }
-    });*/
+    });
 }
 
 

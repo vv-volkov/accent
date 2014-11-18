@@ -451,5 +451,36 @@ def optimize(request):
     y0 = request.GET['y0']
     delta = request.GET['delta']
     theta = request.GET['theta']
-    fort.graddescent(x_k, y_k, delta, theta)
-    return HttpResponse()
+    method = request.GET['method']
+    if method != "1":
+        method = 0
+    method = int(method)
+    fort.graddescent(x0, y0, delta, theta, method)
+    f = open('plotdata.txt','r+')
+    x_coord = []
+    y_coord = []
+    for line in f:
+        x,y = string.split(line)
+        x_coord.append(float(x))
+        y_coord.append(float(y))
+    xstar = float(x)
+    ystar = float(y)
+    x = np.linspace(-10, 10, 50)
+    y = np.linspace(-10, 10, 50)
+    x,y = np.meshgrid(x, y)
+    z = x**2 + 3*y**2 + x*y - 5*x + 3*y
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    plt.contour(x,y,z,20)
+    plt.plot(x_coord,y_coord)
+    plt.plot([xstar], [ystar], marker='o', color='r')
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
+    canvas = FigureCanvas(fig) 
+    out = StringIO.StringIO()
+    canvas.print_png(out)
+    res = base64.b64encode(out.getvalue())
+    qstar = xstar**2 + 3*ystar**2 + xstar*ystar - 5*xstar + 3*ystar
+    obj = {'xstar':xstar,'ystar':ystar,'qstar':qstar,'src':res}
+    plt.close(fig)    
+    return HttpResponse(json.dumps(obj), content_type="application/json")

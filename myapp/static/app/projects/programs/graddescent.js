@@ -48,39 +48,61 @@ Ext.define('graddescent.view.GraddescentViewport',{
                 },{
                     xtype:'label',
                     contentEl:'y0',
-                    columnWidth:'0.2',
-                    itemId:'y0'
+                    columnWidth:'0.2'                    
                 },{
                     xtype:'numberfield',
                     columnWidth:'0.8',
-                    value:'-3'
+                    value:'-3',
+                    itemId:'y0'
                 },{
                     xtype:'label',
                     contentEl:'delta',
-                    columnWidth:'0.2',
-                    itemId:'delta'
+                    columnWidth:'0.2'
                 },{
                     xtype:'numberfield',
                     columnWidth:'0.8',
-                    value:'0.5'
+                    value:'0.1',
+                    allowDecimals:true,
+                    decimalPrecision:4,
+                    itemId:'delta'
                 },{
                     xtype:'label',
                     contentEl:'theta',
-                    columnWidth:'0.2',
-                    itemId:'theta'
+                    columnWidth:'0.2'                    
                 },{
                     xtype:'numberfield',
                     columnWidth:'0.8',
                     allowDecimals:true,
                     decimalPrecision:4,
-                    value:'0.0001'
+                    value:'0.0001',
+                    itemId:'theta'
                 }]
             },{
                 xtype:'fieldset',
                 title:'Дополнительные',
                 defaults:{
                     margin:'2 0 2 0'
-                }
+                },
+                layout:'column',
+                items:[{
+                    xtype:'label',
+                    text:'Метод',
+                    columnWidth:'0.2'                    
+                },{
+                    xtype:'combobox',
+                    store:[[1,'Наискорейший спуск']],
+                    name:'method',
+                    columnWidth:'0.8',
+                    itemId:'method',
+                    listeners:{
+                        change:function(){
+                            if(this.getValue()&&this.getValue()!=null){
+                                this.up('viewport').down('#delta').setDisabled(true);
+                            }
+                            else this.up('viewport').down('#delta').setDisabled(false);
+                        }
+                    }
+                }]
             }],
             dockedItems:[{
                 xtype:'toolbar',
@@ -101,9 +123,9 @@ Ext.define('graddescent.view.GraddescentViewport',{
                     text:'Решить',
                     icon:'/static/app/img/check.png',
                     handler:function(){
-                        lineCurve2D(this.up('toolbar').up('viewport'),1);
-                        lineCurve2D(this.up('toolbar').up('viewport'),2);
                         optimize(this.up('toolbar').up('viewport'));
+                        lineCurve2D(this.up('toolbar').up('viewport'),1);
+                        lineCurve2D(this.up('toolbar').up('viewport'),2);                        
                     }
                 },{
                     xtype:'button',
@@ -163,7 +185,8 @@ Ext.define('graddescent.view.GraddescentViewport',{
                 allowDecimals:true,
                 decimalPrecision:10,
                 itemId:'xstar',
-                readOnly:true
+                readOnly:true,
+                name:'xstar'
             },{
                 xtype:'label',
                 contentEl:'ystar',
@@ -174,7 +197,8 @@ Ext.define('graddescent.view.GraddescentViewport',{
                 allowDecimals:true,
                 decimalPrecision:10,
                 itemId:'ystar',
-                readOnly:true
+                readOnly:true,
+                name:'ystar'
             },{
                 xtype:'label',
                 contentEl:'qstar',
@@ -185,7 +209,8 @@ Ext.define('graddescent.view.GraddescentViewport',{
                 allowDecimals:true,
                 decimalPrecision:10,
                 itemId:'qstar',
-                readOnly:true
+                readOnly:true,
+                name:'qstar'
             }]
         }]
     }]
