@@ -33,6 +33,9 @@ Ext.define('init.view.FolderStrucView',{
                     text:'Добавить директорию',
                     icon:'/static/app/img/folder.png',
                     itemId:'addFolder'
+                },'-',{
+                    text:'Добавить модуль',
+                    itemId:'addModule'
                 }]
             }
         },'',{
@@ -77,7 +80,7 @@ Ext.define('init.view.FolderStrucView',{
             menu:{
                 xtype:'menu',
                 items:[{
-                    text:'Программы',
+                    text:'Проекты',
                     itemId:'refreshCurrent'
                 },{
                     text:'Вся система',

@@ -21,11 +21,11 @@ Ext.define('dynamics.view.DynamicsViewport',{
             height:'50%'
         },
         items:[{
-            region:'north',
+            region:'center',
             title:'Математическая модель',
             contentEl:'math'
         },{
-            region:'center',
+            region:'south',
             xtype:'form',
             title:'Настройка',  
             bodyStyle:'padding:4px;',
@@ -37,6 +37,14 @@ Ext.define('dynamics.view.DynamicsViewport',{
                     margin:'2 0 2 0'
                 },
                 items:[{
+                    xtype:'label',
+                    contentEl:'q',
+                    columnWidth:'0.2'
+                },{
+                    xtype:'numberfield',
+                    columnWidth:'0.8',
+                    value:'5'
+                },{
                     xtype:'label',
                     contentEl:'z0',
                     columnWidth:'0.2'
@@ -52,14 +60,6 @@ Ext.define('dynamics.view.DynamicsViewport',{
                     xtype:'numberfield',
                     columnWidth:'0.8',
                     value:'0.3'
-                },{
-                    xtype:'label',
-                    contentEl:'q',
-                    columnWidth:'0.2'
-                },{
-                    xtype:'numberfield',
-                    columnWidth:'0.8',
-                    value:'5'
                 }]
             }],
             dockedItems:[{
@@ -75,7 +75,7 @@ Ext.define('dynamics.view.DynamicsViewport',{
                     }
                 },{
                     xtype:'button',
-                    text:'Рассчитать',
+                    text:'Построить',
                     icon:'/static/app/img/chart_line.png',
                     handler:function(){
                     

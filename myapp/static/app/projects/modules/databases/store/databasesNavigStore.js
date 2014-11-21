@@ -1,0 +1,14 @@
+Ext.define('databases.store.databasesNavigStore',{
+    extend:'Ext.data.TreeStore',
+    model:'databases.model.databasesNavigModel',
+    autoLoad:true,
+    proxy:{
+        type:'ajax',
+        url:'/static/app/json/databases.json'
+    },
+    root:{
+        text:'',
+        expanded:true,
+        id:'src'
+    }
+});

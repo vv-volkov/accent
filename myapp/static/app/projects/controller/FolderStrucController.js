@@ -33,6 +33,9 @@ Ext.define('init.controller.FolderStrucController',{
             'foldertree menuitem[itemId=addFolder]':{
                 click:this.addFolder
             },
+            'foldertree menuitem[itemId=addModule]':{
+                click:this.addModule
+            },
             'foldertree menuitem[itemId=renameFile]':{
                 click:this.renameFile
             },
@@ -75,6 +78,9 @@ Ext.define('init.controller.FolderStrucController',{
     },
     addFolder:function(menuitem){
         createFileFolder(menuitem.up('button').up('panel'),2);
+    },
+    addModule:function(menuitem){
+        addModule(menuitem.up('button').up('panel'));
     },
     renameFile:function(menuitem){
         renameFileFolder(menuitem.up('button').up('panel'),1);

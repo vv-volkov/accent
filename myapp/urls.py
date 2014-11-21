@@ -38,5 +38,8 @@ urlpatterns = [
     url(r'^givens/',views.givens),
     url(r'^program/',views.program), 
     url(r'^lineCurve2D/',views.lineCurve2D), 
-    url(r'^optimize/',views.optimize),
+    url(r'^optimize/',views.optimize), 
+    url(r'^modules/',views.modules), 
+    url(r'^addModule/',views.addModule),
+    url(r'^addDb/',views.addDb), 
 ]

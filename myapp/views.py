@@ -16,6 +16,7 @@ import string
 import pyodbc
 import pypyodbc
 import jsonpickle
+import re
 import MySQLdb
 import StringIO
 import base64
@@ -484,3 +485,34 @@ def optimize(request):
     obj = {'xstar':xstar,'ystar':ystar,'qstar':qstar,'src':res}
     plt.close(fig)    
     return HttpResponse(json.dumps(obj), content_type="application/json")
+  
+def modules(request):
+    module = request.GET['module']
+    template = loader.get_template('myapp/module.html')
+    context = Context({'module':module})
+    return HttpResponse(template.render(context))
+  
+def addModule(request):
+    module = request.GET['module']
+    tempRoot = 'myapp/static/app/projects/modules/template/'
+    for root, subFolders, files in os.walk(tempRoot):
+        newfolder = root.replace('template',module)
+        if not os.path.exists(newfolder):
+            os.makedirs(newfolder)
+            for f in files:
+                newfile = f.replace('template',module)
+                newfilePath = newfolder + '/' + newfile
+                os.open(newfilePath, os.O_CREAT)
+                shutil.copyfile(root+'/'+f,newfilePath)                
+                with open(newfilePath) as f:
+                    sourcecode = re.sub(r'template',module,f.read().decode('utf-8'))                    
+                with open(newfilePath,'w') as f:
+                    f.write(sourcecode.encode('utf-8'))                     
+    return HttpResponse()
+
+@csrf_exempt  
+def addDb(request):
+    return HttpResponse('{"success":true}', content_type="application/json") 
+
+
+

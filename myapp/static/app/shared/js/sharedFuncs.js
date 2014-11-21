@@ -62,10 +62,10 @@ function createFileFolder(me,tp){
 function removeFileFolder(me,tp){
     var node=me.getSelectionModel().getSelection()[0];
     if(node&&node.get('leaf')&&tp==2){
-        Ext.Msg.alert('Внимание','Необходимо выбрать директорию');
+        message('Необходимо выбрать директорию');
     }
     else if(node&&!node.get('leaf')&&tp==1){
-        Ext.Msg.alert('Внимание','Необходимо выбрать файл');
+        message('Необходимо выбрать файл');
     }
     else if(node){
         Ext.MessageBox.show({
@@ -91,17 +91,15 @@ function removeFileFolder(me,tp){
             }
         });
     }
-    else {
-        Ext.Msg.alert('Внимание','Необходимо выбрать '+((tp==1)?'файл':'директорию'));
-    }
+    else message('Необходимо выбрать '+((tp==1)?'файл':'директорию'));
 }
 function renameFileFolder(me,tp){
     var node=me.getSelectionModel().getSelection()[0],newname="";
     if(node&&node.get('leaf')&&tp==2){
-        Ext.Msg.alert('Внимание','Необходимо выбрать директорию');
+        message('Необходимо выбрать директорию');
     }
     else if(node&&!node.get('leaf')&&tp==1){
-        Ext.Msg.alert('Внимание','Необходимо выбрать файл');
+        message('Необходимо выбрать файл');
     }
     else if(node){
         Ext.MessageBox.show({
@@ -131,9 +129,7 @@ function renameFileFolder(me,tp){
              }
         });
     }
-    else {
-        Ext.Msg.alert('Внимание','Необходимо выбрать '+((tp==1)?'файл':'директорию'));
-    }
+    else message('Необходимо выбрать '+((tp==1)?'файл':'директорию'));
 }
 function reloadFolderTree(treeStore,node){
     treeStore.setRootNode(node);
@@ -151,7 +147,7 @@ function doGitPush(me){
     args={'mask':mymask};
     ajaxRequest('/myapp/gitPush/','GET',args,function(){
         args['mask'].destroy();
-        Ext.Msg.alert('Внимание','Операция выполнена');    
+        message('Операция завершена'); 
     });
 }
 function doGitPull(me,txt){
@@ -186,12 +182,12 @@ function createWindowFormAction(parentObj,offset,txt,dbObj,args,icon,method,save
                                 success:function(res,req){
                                     var vals=Ext.decode(res.responseText,1);
                                     frm=Ext.create('Ext.form.Panel',{
-                                        border:false,
-                                        bodyStyle:'padding:4px;background:url(/static/app/img/bgo.png)',
-                                        autoScroll:true,
-                                        defaults:{
-                                            anchor:'100%'
-                                        },
+                                       border:false,
+                                       bodyStyle:'padding:4px;background:url(/static/app/img/bgo.png)',
+                                       autoScroll:true,
+                                       defaults:{
+                                           anchor:'100%'
+                                       },
                                        items:json,
                                        itemId:'openForm',
                                        submitEmptyText:false,
@@ -202,7 +198,6 @@ function createWindowFormAction(parentObj,offset,txt,dbObj,args,icon,method,save
                                                rendercard(this);  
                                                if(vals&&vals!=""&&vals!=null){
                                                    this.getForm().setValues(JSON.parse(vals));
-                                                   //alert();
                                                }
                                           }
                                        }
@@ -307,12 +302,7 @@ function savecontent(if_alert,callback){
     path=cw.getPath(),
     items=[{xtype:'textarea',name:'sourcecode',value:val},{xtype:'textfield',name:'path',value:path}];
     formSubmit(items,'/myapp/saveSourceCode/',function(){
-        if(if_alert) Ext.MessageBox.show({
-            title:'Внимание',
-            msg:'Действия выполнены',
-            closable:true,
-            buttons:Ext.Msg.OK
-        });
+        if(if_alert) message('Действия выполнены'); 
         callback();
     });
 }
@@ -324,12 +314,7 @@ function compilefortran(path,p){
         method:'GET',
         success:function(res,req){
             mymask.destroy();   
-            Ext.MessageBox.show({
-                title:'Внимание',
-                msg:'Компиляция завершена',
-                closable:true,
-                buttons:Ext.Msg.OK
-            });
+            message('Компиляция завершена'); 
         }
     });
 }
@@ -377,6 +362,126 @@ function optimize(me){
         }
     });
 }
+function addModule(me){
+    Ext.MessageBox.show({
+        title:'Название модуля',
+        msg:'',
+        buttons:Ext.MessageBox.OKCANCEL,
+        prompt:true,
+        fn:function(btn,txt,cBoxes){
+            if(btn=='ok'&&txt!=""){
+                ajaxRequest('/myapp/addModule/?module='+txt,'GET',{},function(){
+                    message('Операция завершена');   
+                });        
+            }
+        }
+    });
+}
+function message(msg){
+    Ext.MessageBox.show({
+        title:'Внимание',
+        msg:msg,
+        closable:true,
+        buttons:Ext.Msg.OK
+    }); 
+}
+function addDb(me){
+    var width=me.up('viewport').height*1.6;
+    Ext.create('Ext.window.Window',{
+        title:me.tooltip,
+        width:width,
+        height:me.up('viewport').height,
+        modal:true,
+        closable:true,
+        icon:me.icon,
+        iconCls:me.iconCls,
+        items:[{
+            xtype:'form',
+            border:false,
+            bodyStyle:'padding:4px;background:url(/static/app/img/bgo.png)',
+            autoScroll:true,
+            method:'POST',
+            standardSubmit:false,
+            defaults:{
+                anchor:'100%',
+                width:'100%',
+                labelWidth:'50%',
+                labelSeparator:'',
+            },
+            items:[{
+                xtype:'textfield',                
+                fieldLabel:'Название',
+                name:'name'
+            },{
+                xtype:'combobox',
+                fieldLabel:'Тип',
+                name:'type',
+                allowEmpty:false,
+                value:1,
+                store:[[1,'MySQL'],[2,'MS SQL'],[3,'Sqlite'],[4,'Excel'],[5,'XML']],
+                listeners:{
+                    change:function(){
+                        if(this.getValue()==1){
+                            setSourceType(this.up('form'),true);
+                        }
+                        else {
+                            setSourceType(this.up('form'),false);
+                        }
+                    }
+                }
+            },{
+                xtype:'textfield',                
+                fieldLabel:'IP',
+                name:'ip',
+                itemId:'ip'
+            },{
+                xtype:'textfield',                
+                fieldLabel:'Порт',
+                name:'port',
+                itemId:'port'
+            },{
+                xtype:'textfield',                
+                fieldLabel:'Логин',
+                name:'login',
+                itemId:'login'
+            },{
+                xtype:'textfield',                
+                fieldLabel:'Пароль',
+                name:'password',
+                itemId:'password'
+            }],
+            listeners:{
+                beforerender:function(){
+                    rendercard(this); 
+                }
+            }
+        }],
+        layout:'fit',
+	    itemId:'openWindow',
+        buttons:[{
+            text:'Сохранить',
+            icon:'/static/app/img/save.png',
+            handler:function(){
+                var me=this;
+                this.up('window').down('form').getForm().submit({url:'/myapp/addDb/',success:function(form,action){
+                    me.up('window').destroy();    
+                    message('Операция завершена');                    
+                }});
+            }
+        },{
+            text:'Закрыть',
+            icon:'/static/app/img/close.png',
+            handler:function(){
+                this.up('window').destroy();
+            }
+        }]
+    }).show();
+}
 
-
+function setSourceType(frm,bool){
+  frm.down('#ip').setVisible(bool);
+  frm.down('#port').setVisible(bool);
+  frm.down('#login').setVisible(bool);
+  frm.down('#password').setVisible(bool);
+}
 

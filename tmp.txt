@@ -1,0 +1,1 @@
+myapp/static/app/projects/modules/greats

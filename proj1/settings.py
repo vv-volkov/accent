@@ -85,4 +85,5 @@ STATIC_URL = '/static/'
 TEMPLATE_DIRS = (
     'myapp/templates/myapp/',
     'myapp/static/app/projects/programs/templates/',
+    'myapp/static/app/projects/modules/templates/',
 )

@@ -1,0 +1,19 @@
+Ext.define('template.store.templateNavigStore',{
+    extend:'Ext.data.TreeStore',
+    model:'template.model.templateNavigModel',
+    autoLoad:true,
+    proxy:{
+        type:'ajax',
+        url:'/myapp/folderstruc'
+    },
+    snapshot:{
+        text:'',
+        expanded:true,
+        id:'./myapp/'
+    },
+    root:{
+        text:'',
+        expanded:true,
+        id:'./myapp/static/app/projects/modules/template/'
+    }
+});
