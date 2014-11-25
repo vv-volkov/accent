@@ -42,4 +42,8 @@ urlpatterns = [
     url(r'^modules/',views.modules), 
     url(r'^addModule/',views.addModule),
     url(r'^addDb/',views.addDb), 
+    url(r'^plotXY/',views.plotXY), 
+    url(r'^dbTypes/',views.dbTypes),
+    url(r'^dblist/',views.dblist), 
+    url(r'^optimizeHook/',views.optimizeHook),
 ]

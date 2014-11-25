@@ -27,6 +27,7 @@ from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 import myapp.static.app.shared.fortran.fortran as fort
+#import myapp.static.app.shared.fortran.hook as hook
 
 
 repoDir = '.'
@@ -423,14 +424,22 @@ def program(request):
   
 def lineCurve2D(request):
     tp = request.GET['tp']
-    x = np.linspace(-10, 10, 50)
-    y = np.linspace(-10, 10, 50)
-    x,y = np.meshgrid(x, y)
-    z = x**2 + 3*y**2 + x*y - 5*x + 3*y
+    func = request.GET['func']
+    #z = x**2 + 3*y**2 + x*y - 5*x - 3*y
+    if func == "1":
+        x = np.linspace(-10, 10, 50)
+        y = np.linspace(-10, 10, 50)
+        x,y = np.meshgrid(x, y)
+        z = 2 * x**2 + y**2 - x*y + 5*x - 3*y
+    elif func == "2":
+        x = np.linspace(-5, 5, 50)
+        y = np.linspace(-5, 5, 50)
+        x,y = np.meshgrid(x, y)
+        z = (abs((3 - x)*x-2*y+1))**(7/3) + (abs((3-y)*y-x+1))**(7/3)
     fig = plt.figure()
     if (tp == "1"):
         ax = fig.add_subplot(111)
-        plt.contour(x,y,z,20)
+        plt.contour(x,y,z,50)
         ax.set_xlabel("X")
         ax.set_ylabel("Y")
     elif (tp == "2"):
@@ -469,7 +478,8 @@ def optimize(request):
     x = np.linspace(-10, 10, 50)
     y = np.linspace(-10, 10, 50)
     x,y = np.meshgrid(x, y)
-    z = x**2 + 3*y**2 + x*y - 5*x + 3*y
+    #z = x**2 + 3*y**2 + x*y - 5*x + 3*y
+    z = 2*x**2 + y**2 - x*y + 5*x - 3 * y     
     fig = plt.figure()
     ax = fig.add_subplot(111)
     plt.contour(x,y,z,20)
@@ -481,9 +491,51 @@ def optimize(request):
     out = StringIO.StringIO()
     canvas.print_png(out)
     res = base64.b64encode(out.getvalue())
-    qstar = xstar**2 + 3*ystar**2 + xstar*ystar - 5*xstar + 3*ystar
+    #qstar = xstar**2 + 3*ystar**2 + xstar*ystar - 5*xstar + 3*ystar
+    qstar = 2*xstar**2 + ystar**2 - xstar*ystar + 5*xstar - 3*ystar
     obj = {'xstar':xstar,'ystar':ystar,'qstar':qstar,'src':res}
     plt.close(fig)    
+    return HttpResponse(json.dumps(obj), content_type="application/json")
+  
+def plotXY(request):
+    q = float(request.GET['q'])
+    z0 = float(request.GET['z0'])
+    r = float(request.GET['r'])
+    y0 = float(request.GET['y0'])
+    t = np.linspace(-10,10)
+    y = (q * t**2) / 2 + (z0 - 1)*t + y0
+    x = (q * t**3) / 6 + (z0 - 1)*t**2/2 + y0*t
+    
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    plt.plot(t, y)
+    ax.set_xlabel("T")
+    ax.set_ylabel("Y")
+    plt.axhline(0,color='black')
+    plt.axvline(0,color='black')
+    plt.ylim([-5,30])
+    canvas = FigureCanvas(fig) 
+    out = StringIO.StringIO()
+    canvas.print_png(out)
+    yOfTbottom = base64.b64encode(out.getvalue())    
+    plt.close(fig)
+    
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    plt.plot(t, x)
+    ax.set_xlabel("T")
+    ax.set_ylabel("X")
+    plt.axhline(0,color='black')
+    plt.axhline(1,color='black')
+    plt.axvline(0,color='black')
+    plt.ylim([0,5])
+    canvas = FigureCanvas(fig) 
+    out = StringIO.StringIO()
+    canvas.print_png(out)
+    xOfTbottom = base64.b64encode(out.getvalue())    
+    plt.close(fig)
+    
+    obj = {'yOfTbottom':yOfTbottom,'xOfTbottom':xOfTbottom}
     return HttpResponse(json.dumps(obj), content_type="application/json")
   
 def modules(request):
@@ -512,7 +564,262 @@ def addModule(request):
 
 @csrf_exempt  
 def addDb(request):
-    return HttpResponse('{"success":true}', content_type="application/json") 
-
+    name = request.POST['name']
+    tp = request.POST['type']
+    ip = request.POST['ip']
+    port = request.POST['port']
+    login = request.POST['login']
+    password = request.POST['password']
+    db = MySQLdb.connect("localhost","root","root","test")
+    cursor = db.cursor()
+    cursor.execute(u"insert into db (tname,id_parent,ip,port,login,pass) VALUES(%s,%s,%s,%s,%s,%s)",(name,tp,ip,port,login,password))
+    res = cursor.fetchall()
+    db.commit()
+    cursor.execute(u"select LAST_INSERT_ID()")
+    for row in cursor:
+        last_insert_id = row[0]
+    ret = "{'success':true,'message':%s}" % (last_insert_id)
+    return HttpResponse(ret, content_type="application/json") 
+  
+def dbTypes(request):
+    db = MySQLdb.connect("localhost","root","root","test")
+    cursor = db.cursor()
+    cursor.execute(u"select id, tname from db where id_parent = 0 order by id desc")
+    output = []
+    for row in cursor:
+        output.append({'id':row[0],'tname':row[1]})
+    return HttpResponse(json.dumps(output), content_type="application/json")
+  
+def dblist(request):
+    node = request.GET['node']
+    if node == "src":
+        node = "0"
+    db = MySQLdb.connect("localhost","root","root","test")
+    cursor = db.cursor()
+    cursor.execute(u"select id, id_parent, tname, CASE WHEN id_parent = 0 THEN 'false' ELSE 'true' END AS leaf from db where id_parent = %s order by id desc", (node))
+    output = []
+    for row in cursor:
+        output.append({'id':row[0],'id_parent':row[1],'text':row[2],'leaf':row[3]})
+    return HttpResponse(json.dumps(output), content_type="application/json")
+  
+def optimizeHook(request):
+    x0 = float(request.GET['x0'])
+    y0 = float(request.GET['y0'])
+    h0 = float(request.GET['h0'])
+    h1 = float(request.GET['h1'])
+    lamb = float(request.GET['lambda'])
+    theta = float(request.GET['theta'])
+    fd = open("plotdata.txt","w")
+    fd.write("")
+    fd.close()
+    fd = open("plotdata.txt","w+")
+    exploresearch(x0, y0, h0, h1, lamb, theta, broyden(x0, y0), fd) 
+    fd.close()
+    fd = open('plotdata.txt','r+')
+    x_coord = []
+    y_coord = []
+    for line in fd:
+        x,y = string.split(line)
+        x_coord.append(float(x))
+        y_coord.append(float(y))
+    xstar = float(x)
+    ystar = float(y)
+    x = np.linspace(-5, 5, 50)
+    y = np.linspace(-5, 5, 50)
+    x,y = np.meshgrid(x, y)
+    z = (abs((3 - x)*x-2*y+1))**(7/3) + (abs((3-y)*y-x+1))**(7/3)     
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    plt.contour(x,y,z,80)
+    plt.plot(x_coord,y_coord)
+    plt.plot([xstar], [ystar], marker='o', color='r')
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
+    canvas = FigureCanvas(fig) 
+    out = StringIO.StringIO()
+    canvas.print_png(out)
+    res = base64.b64encode(out.getvalue())
+    qstar = broyden(float(xstar),float(ystar))
+    obj = {'xstar':xstar,'ystar':ystar,'qstar':qstar,'src':res}
+    plt.close(fig)    
+    return HttpResponse(json.dumps(obj), content_type="application/json")
+  
+def simpleexplore(x0, y0,  hx, hy, lamb, theta, curval):
+    if broyden(x0 + hx, y0) < curval:
+        if broyden(x0 + hx, y0 + hy) < curval:
+            xs = x0 + hx
+            ys = y0 + hy
+            flag = True              
+        elif broyden(x0 + hx, y0 - hy) < curval:                
+            xs = x0 + hx 
+            ys = y0 - hy
+            flag = True
+        else:
+            xs = x0 + hx
+            ys = y0
+            flag = True
+    elif broyden(x0 - hx, y0) < curval:
+        if broyden(x0 - hx, y0 + hy) < curval:
+            xs = x0 - hx
+            ys = y0 + hy
+            flag = True              
+        elif broyden(x0 - hx, y0 - hy) < curval:                
+            xs = x0 - hx 
+            ys = y0 - hy
+            flag = True
+        else:
+            xs = x0 - hx
+            ys = y0
+            flag = True
+    elif broyden(x0, y0 + hy) < curval:
+        xs = x0
+        ys = y0 + hy
+        flag = True
+    elif broyden(x0, y0 + hy) < curval:
+        xs = x0
+        ys = y0 - hy
+        flag = True
+    else:
+        flag = False
+        xs = x0
+        ys = y0
+    return [xs, ys, flag]
+  
+def repeatpattern(xk, yk, hx, hy, xs, ys, lamb, theta, fd):
+    flag = True
+    x2 = xs
+    y2 = xs    
+    while flag == True:
+        xn = xk + lamb * (x2 - xk)
+        yn = yk + lamb * (y2 - yk)
+        #print "xk = ",xk, ", yx = ", yk , ", res = ", broyden(xk, yk)
+        fd.write( "%.8f %.8f\n"  % ( xk, yk ) )
+        xs, ys, flag = simpleexplore(xn, yn,  hx, hy, lamb, theta, broyden(xk, yk))
+        if flag == True:
+            xk = x2
+            yk = y2
+            x2 = xs
+            y2 = ys
+    return [xk, yk]
+  
+def exploresearch(xk, yk,  hx, hy, lamb, theta, curval, fd):
+    if hx < theta and hy < theta:
+        return [xk, yk,  hx, hy]
+    else:
+        while hx > theta and hy > theta:
+            # шаг вправо
+            if broyden(xk + hx, yk) < curval:
+                # шаг вверх
+                if broyden(xk + hx, yk + hy) < curval:
+                    xn = xk + lamb * hx
+                    yn = yk + lamb * hy
+                    xk = xk + hx
+                    yk = yk + hy
+                    newval = broyden(xk, yk)
+                    xs, ys, flag = simpleexplore(xn, yn,  hx, hy, lamb, theta, newval) 
+                    if flag:
+                        xk, yk = repeatpattern(xk, yk, hx, hy, xs, ys, lamb, theta, fd)
+                    xk, yk,  hx, hy = exploresearch(xk, yk,  hx, hy, lamb, theta, broyden(xk, yk), fd)
+                # шаг вниз
+                elif broyden(xk + hx, yk - hy) < curval:
+                    xn = xk + lamb * hx
+                    yn = yk - lamb * hy
+                    xk = xk + hx
+                    yk = yk - hy
+                    newval = broyden(xk, yk)
+                    xs, ys, flag = simpleexplore(xn, yn,  hx, hy, lamb, theta, newval) 
+                    if flag:
+                        xk, yk = repeatpattern(xk, yk, hx, hy, xs, ys, lamb, theta, fd)
+                    xk, yk,  hx, hy = exploresearch(xk, yk,  hx, hy, lamb, theta, broyden(xk, yk), fd)
+                # остаемся
+                else:
+                    #поиск по образцу
+                    # (xn, yn) - вершина, в которой делаем поиск по образцу
+                    hy = hy / 2
+                    xn = xk + lamb * hx
+                    yn = yk
+                    xk = xk + hx
+                    yk = yk
+                    newval = broyden(xk, yk)
+                    xs, ys, flag = simpleexplore(xn, yn,  hx, hy, lamb, theta, newval) 
+                    if flag:
+                        xk, yk = repeatpattern(xk, yk, hx, hy, xs, ys, lamb, theta, fd)
+                    xk, yk,  hx, hy = exploresearch(xk, yk,  hx, hy, lamb, theta, broyden(xk, yk), fd)
+            # шаг влево
+            elif broyden(xk - hx, yk) < curval:
+                # шаг вверх
+                if broyden(xk - hx, yk + hy) < curval:
+                    xn = xk - lamb * hx
+                    yn = yk + lamb * hy
+                    xk = xk - hx
+                    yk = yk + hy
+                    newval = broyden(xk, yk)
+                    xs, ys, flag = simpleexplore(xn, yn,  hx, hy, lamb, theta, newval) 
+                    if flag:
+                        xk, yk = repeatpattern(xk, yk, hx, hy, xs, ys, lamb, theta, fd)
+                    xk, yk,  hx, hy = exploresearch(xk, yk,  hx, hy, lamb, theta, broyden(xk, yk), fd)
+                # шаг вниз
+                elif broyden(xk - hx, yk - hy) < curval:
+                    xn = xk - lamb * hx
+                    yn = yk - lamb * hy
+                    xk = xk - hx
+                    yk = yk - hy
+                    newval = broyden(xk, yk)
+                    xs, ys, flag = simpleexplore(xn, yn,  hx, hy, lamb, theta, newval) 
+                    if flag:
+                        xk, yk = repeatpattern(xk, yk, hx, hy, xs, ys, lamb, theta, fd)
+                    xk, yk,  hx, hy = exploresearch(xk, yk,  hx, hy, lamb, theta, broyden(xk, yk), fd)
+                # остаемся
+                else:
+                    #поиск по образцу
+                    # (xn, yn) - вершина, в которой делаем поиск по образцу
+                    hy = hy / 2
+                    xn = xk - lamb * hx
+                    yn = yk
+                    xk = xk - hx
+                    yk = yk
+                    newval = broyden(xk, yk)
+                    xs, ys, flag = simpleexplore(xn, yn,  hx, hy, lamb, theta, newval) 
+                    if flag:
+                        xk, yk = repeatpattern(xk, yk, hx, hy, xs, ys, lamb, theta, fd)
+                    xk, yk,  hx, hy = exploresearch(xk, yk,  hx, hy, lamb, theta, broyden(xk, yk), fd)
+            # шаг вверх
+            elif broyden(xk, yk + hy) < curval:
+                hx = hx / 2
+                xn = xk
+                yn = yk + lamb * hy
+                xk = xk
+                yk = yk + hy
+                newval = broyden(xk, yk)
+                xs, ys, flag = simpleexplore(xn, yn,  hx, hy, lamb, theta, newval) 
+                if flag:
+                    xk, yk = repeatpattern(xk, yk, hx, hy, xs, ys, lamb, theta, fd)
+                xk, yk,  hx, hy = exploresearch(xk, yk,  hx, hy, lamb, theta, broyden(xk, yk), fd)
+            # шаг вниз
+            elif broyden(xk, yk - hy) < curval:
+                hx = hx / 2
+                xn = xk
+                yn = yk - lamb * hy
+                xk = xk
+                yk = yk - hy
+                newval = broyden(xk, yk)
+                xs, ys, flag = simpleexplore(xn, yn,  hx, hy, lamb, theta, newval) 
+                if flag:
+                    xk, yk = repeatpattern(xk, yk, hx, hy, xs, ys, lamb, theta, fd)
+                xk, yk,  hx, hy = exploresearch(xk, yk,  hx, hy, lamb, theta, broyden(xk, yk), fd)
+            else:
+                hx = hx / 2
+                hy = hy / 2
+                xk, yk,  hx, hy = exploresearch(xk, yk,  hx, hy, lamb, theta, broyden(xk, yk), fd)
+    return [xk, yk,  hx, hy]
+            
+def broyden(x_k, y_k):
+    val = (abs((3 - x_k)*x_k-2*y_k+1))**(7/3) + (abs((3-y_k)*y_k-x_k+1))**(7/3)
+    return val
+  
+  
+  
+  
+  
 
 

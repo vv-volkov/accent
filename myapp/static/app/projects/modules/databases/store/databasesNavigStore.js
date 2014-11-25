@@ -4,7 +4,7 @@ Ext.define('databases.store.databasesNavigStore',{
     autoLoad:true,
     proxy:{
         type:'ajax',
-        url:'/static/app/json/databases.json'
+        url:'/myapp/dblist/'
     },
     root:{
         text:'',

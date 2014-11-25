@@ -1,8 +1,8 @@
 !program test
     !real(kind=8):: x_k, y_k, dqx, dqy, delta, theta
     !integer:: method
-    !x_k = 2
-    !y_k = -3
+    !x_k = -1
+    !y_k = 3
     !delta = 0.1  
     !theta = 0.001
     !method = 0
@@ -36,8 +36,10 @@ end subroutine graddescent
 subroutine diff(x_k, y_k, dqx, dqy)
     real(kind=8), intent(in):: x_k, y_k
     real(kind=8), intent(out):: dqx, dqy
-    dqx = 2 * x_k + y_k - 5
-    dqy = 6 * y_k + x_k + 3
+    !dqx = 2 * x_k + y_k - 5
+    !dqy = 6 * y_k + x_k + 3
+    dqx = 4 * x_k - y_k + 5
+    dqy = 2*y_k - x_k - 3
 end subroutine diff
 
 subroutine steep(x_k, y_k, delta)

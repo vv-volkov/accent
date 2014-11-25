@@ -43,7 +43,17 @@ Ext.define('dynamics.view.DynamicsViewport',{
                 },{
                     xtype:'numberfield',
                     columnWidth:'0.8',
-                    value:'5'
+                    value:'5',
+                    itemId:'q'
+                },{
+                    xtype:'label',
+                    contentEl:'y0',
+                    columnWidth:'0.2'
+                },{
+                    xtype:'numberfield',
+                    columnWidth:'0.8',
+                    value:'0.5',
+                    itemId:'y0'
                 },{
                     xtype:'label',
                     contentEl:'z0',
@@ -51,7 +61,8 @@ Ext.define('dynamics.view.DynamicsViewport',{
                 },{
                     xtype:'numberfield',
                     columnWidth:'0.8',
-                    value:'1.5'
+                    value:'1.5',
+                    itemId:'z0'
                 },{
                     xtype:'label',
                     contentEl:'R',
@@ -59,7 +70,8 @@ Ext.define('dynamics.view.DynamicsViewport',{
                 },{
                     xtype:'numberfield',
                     columnWidth:'0.8',
-                    value:'0.3'
+                    value:'0.3',
+                    itemId:'r'
                 }]
             }],
             dockedItems:[{
@@ -78,7 +90,7 @@ Ext.define('dynamics.view.DynamicsViewport',{
                     text:'Построить',
                     icon:'/static/app/img/chart_line.png',
                     handler:function(){
-                    
+                        plotXY(this.up('form'));
                     }
                 }]
             }]
@@ -87,6 +99,41 @@ Ext.define('dynamics.view.DynamicsViewport',{
         region:'center',
         xtype:'panel',
         title:'Графики и диаграммы',
-        width:'60%'
+        width:'60%',
+        layout:'column',
+        defaults:{
+            margin:'4 2 2 4',
+            layout:'fit'
+        },
+        autoScroll:true,
+        items:[{
+            xtype:'fieldset',
+            title:'Движение с нижней пластины',
+            columnWidth:'.5',
+            height:'100%',
+            items:[{
+                xtype:'fieldset',
+                itemId:'yOfTbottom',
+                height:'45%'
+            },{
+                xtype:'fieldset',
+                itemId:'xOfTbottom',
+                height:'45%'
+            }]
+        },{
+            xtype:'fieldset',
+            title:'Движение с верхней пластины',
+            columnWidth:'.5',
+            height:'100%',
+            items:[{
+                xtype:'fieldset',
+                itemId:'yOfTtop',
+                height:'45%'
+            },{
+                xtype:'fieldset',
+                itemId:'xOfTtop',
+                height:'45%'
+            }]
+        }]
     }]
 })

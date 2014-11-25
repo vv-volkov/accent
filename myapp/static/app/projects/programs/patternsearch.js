@@ -1,6 +1,6 @@
-Ext.define('graddescent.view.GraddescentViewport',{
+Ext.define('patternsearch.view.GraddescentViewport',{
     extend:'Ext.form.Panel',
-    alias:'widget.graddescent',
+    alias:'widget.patternsearch',
     layout:'border',
     border:false,
     defaults:{
@@ -52,11 +52,11 @@ Ext.define('graddescent.view.GraddescentViewport',{
                 },{
                     xtype:'numberfield',
                     columnWidth:'0.8',
-                    value:'-3',
+                    value:'2',
                     itemId:'y0'
                 },{
                     xtype:'label',
-                    contentEl:'delta',
+                    contentEl:'h0',
                     columnWidth:'0.2'
                 },{
                     xtype:'numberfield',
@@ -64,7 +64,27 @@ Ext.define('graddescent.view.GraddescentViewport',{
                     value:'0.1',
                     allowDecimals:true,
                     decimalPrecision:4,
-                    itemId:'delta'
+                    itemId:'h0'
+                },{
+                    xtype:'label',
+                    contentEl:'h1',
+                    columnWidth:'0.2'
+                },{
+                    xtype:'numberfield',
+                    columnWidth:'0.8',
+                    value:'0.1',
+                    allowDecimals:true,
+                    decimalPrecision:4,
+                    itemId:'h1'
+                },{
+                    xtype:'label',
+                    contentEl:'lambda',
+                    columnWidth:'0.2'
+                },{
+                    xtype:'numberfield',
+                    columnWidth:'0.8',
+                    value:'2',
+                    itemId:'lambda'
                 },{
                     xtype:'label',
                     contentEl:'theta',
@@ -74,34 +94,8 @@ Ext.define('graddescent.view.GraddescentViewport',{
                     columnWidth:'0.8',
                     allowDecimals:true,
                     decimalPrecision:4,
-                    value:'0.0001',
+                    value:'0.01',
                     itemId:'theta'
-                }]
-            },{
-                xtype:'fieldset',
-                title:'Дополнительные',
-                defaults:{
-                    margin:'2 0 2 0'
-                },
-                layout:'column',
-                items:[{
-                    xtype:'label',
-                    text:'Метод',
-                    columnWidth:'0.2'                    
-                },{
-                    xtype:'combobox',
-                    store:[[1,'Наискорейший спуск']],
-                    name:'method',
-                    columnWidth:'0.8',
-                    itemId:'method',
-                    listeners:{
-                        change:function(){
-                            if(this.getValue()&&this.getValue()!=null){
-                                this.up('viewport').down('#delta').setDisabled(true);
-                            }
-                            else this.up('viewport').down('#delta').setDisabled(false);
-                        }
-                    }
                 }]
             }],
             dockedItems:[{
@@ -122,10 +116,10 @@ Ext.define('graddescent.view.GraddescentViewport',{
                     xtype:'button',
                     text:'Решить',
                     icon:'/static/app/img/check.png',
-                    handler:function(){
-                        optimize(this.up('toolbar').up('viewport'));
-                        lineCurve2D(this.up('toolbar').up('viewport'),1,1);
-                        lineCurve2D(this.up('toolbar').up('viewport'),2,1);                        
+                    handler:function(){                        
+                        lineCurve2D(this.up('toolbar').up('viewport'),1,2);
+                        lineCurve2D(this.up('toolbar').up('viewport'),2,2);                        
+                        optimizeHook(this.up('toolbar').up('viewport'));
                     }
                 },{
                     xtype:'button',
@@ -161,7 +155,7 @@ Ext.define('graddescent.view.GraddescentViewport',{
             height:'45%'
         },{
             xtype:'fieldset',
-            title:'Градиентный спуск',
+            title:'Метод Хука-Дживса',
             columnWidth:'0.5',
             height:'50%',
             itemId:'Map2D',

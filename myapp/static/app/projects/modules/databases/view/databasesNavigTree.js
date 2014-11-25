@@ -4,12 +4,6 @@ Ext.define('databases.view.databasesNavigTree',{
     alias:'widget.databasesnavigtree',
     rootVisible:false,
     border:false,
-    viewConfig:{
-        plugins:{
-            ptype:'treeviewdragdrop',
-            enableDrag:true
-        }
-    },
     dockedItems:[{
         xtype:'toolbar',
         itemId:'foldertbar',
@@ -21,8 +15,18 @@ Ext.define('databases.view.databasesNavigTree',{
         },'-',{
             xtype:'button',
             icon:'/static/app/img/add.png',
-            tooltip:'Добавить источник',
-            itemId:'add'
+            tooltip:'Добавить',
+            width:32,
+            menu:{
+                xtype:'menu',
+                items:[{
+                    text:'Добавить тип',
+                    itemId:'addType'
+                },{
+                    text:'Добавить источник',
+                    itemId:'addDb'
+                }]
+            }
         }]
     }]
 });

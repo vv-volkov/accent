@@ -318,13 +318,13 @@ function compilefortran(path,p){
         }
     });
 }
-function lineCurve2D(me,tp){
+function lineCurve2D(me,tp,f){
     if(tp==1) var plotId='#LineCurve2D';
     else if(tp==2) var plotId='#Surface3D';
     var mymask=new Ext.LoadMask({msg:'Происходит построение...',target:me.down(plotId)});
-    mymask.show();
+    mymask.show();  
     Ext.Ajax.request({
-        url:'/myapp/lineCurve2D/?tp='+tp,
+        url:'/myapp/lineCurve2D/?tp='+tp+'&func='+f,
         method:'GET',
         success:function(res,req){            
             var image = Ext.decode(res.responseText,1),
@@ -343,10 +343,35 @@ function optimize(me){
     var x0=me.down('#x0').getValue(),y0=me.down('#y0').getValue(),
         delta=me.down('#delta').getValue(),theta=me.down('#theta').getValue(),
         method=me.down('#method').getValue();
+    method = 0;
     var mymask=new Ext.LoadMask({msg:'Происходит построение...',target:me.down('#Map2D')});
     mymask.show();
     Ext.Ajax.request({
         url:'/myapp/optimize/?x0='+x0+'&y0='+y0+'&delta='+delta+'&theta='+theta+'&method='+method,
+        method:'GET',
+        success:function(res,req){
+            var image = Ext.decode(res.responseText,1),
+            plot=me.down('#Map2D');
+            plot.items.each(function(el){
+                el.destroy();
+            });
+            var wd=me.down('#Map2D').getWidth()-20,
+                ht=me.down('#Map2D').getHeight()-20;
+            plot.add({xtype:'panel',height:ht,wisth:wd, html:'<img src="data:image/png;base64, '+image.src+'" width="'+wd+'px" height="'+ht+'px" style="width:'+wd+'px;height:'+ht+'px"/>'});         
+            mymask.destroy();
+            me.down('form').getForm().setValues(image)
+        }
+    });
+}
+function optimizeHook(me){
+    var x0=me.down('#x0').getValue(),y0=me.down('#y0').getValue(),
+        h0=me.down('#h0').getValue(),h1=me.down('#h1').getValue(),
+        theta=me.down('#theta').getValue(),
+        lambda=me.down('#lambda').getValue();
+    var mymask=new Ext.LoadMask({msg:'Происходит построение...',target:me.down('#Map2D')});
+    mymask.show();
+    Ext.Ajax.request({
+        url:'/myapp/optimizeHook/?x0='+x0+'&y0='+y0+'&h0='+h0+'&h1='+h1+'&theta='+theta+'&lambda='+lambda,
         method:'GET',
         success:function(res,req){
             var image = Ext.decode(res.responseText,1),
@@ -385,103 +410,175 @@ function message(msg){
         buttons:Ext.Msg.OK
     }); 
 }
-function addDb(me){
-    var width=me.up('viewport').height*1.6;
-    Ext.create('Ext.window.Window',{
-        title:me.tooltip,
-        width:width,
-        height:me.up('viewport').height,
-        modal:true,
-        closable:true,
-        icon:me.icon,
-        iconCls:me.iconCls,
-        items:[{
-            xtype:'form',
-            border:false,
-            bodyStyle:'padding:4px;background:url(/static/app/img/bgo.png)',
-            autoScroll:true,
-            method:'POST',
-            standardSubmit:false,
-            defaults:{
-                anchor:'100%',
-                width:'100%',
-                labelWidth:'50%',
-                labelSeparator:'',
-            },
+function addDb(me,tp){
+    var width=me.up('viewport').height*1.6,
+    selection=me.up('viewport').down('databasesnavigtree').getSelectionModel().getSelection();
+    if(tp==2&&selection.length==0){
+        message('Необходимо выбрать тип источника');  
+    }
+    else {
+        Ext.create('Ext.window.Window',{
+            title:me.text,
+            width:width,
+            height:me.up('viewport').height,
+            modal:true,
+            closable:true,
+            icon:me.icon,
+            iconCls:me.iconCls,
             items:[{
-                xtype:'textfield',                
-                fieldLabel:'Название',
-                name:'name'
-            },{
-                xtype:'combobox',
-                fieldLabel:'Тип',
-                name:'type',
-                allowEmpty:false,
-                value:1,
-                store:[[1,'MySQL'],[2,'MS SQL'],[3,'Sqlite'],[4,'Excel'],[5,'XML']],
-                listeners:{
-                    change:function(){
-                        if(this.getValue()==1){
-                            setSourceType(this.up('form'),true);
+                xtype:'form',
+                border:false,
+                bodyStyle:'padding:4px;background:url(/static/app/img/bgo.png)',
+                autoScroll:true,
+                method:'POST',
+                standardSubmit:false,
+                defaults:{
+                    anchor:'100%',
+                    width:'100%',
+                    labelWidth:'50%',
+                    labelSeparator:'',
+                },
+                items:[{
+                    xtype:'textfield',                
+                    fieldLabel:'Название',
+                    name:'name',
+                    itemId:'name'
+                },{
+                    xtype:'combobox',
+                    fieldLabel:'Тип',
+                    name:'type',
+                    itemId:'type',
+                    allowEmpty:false,
+                    value:(tp==1)?0:null,
+                    hidden:(tp==1)?true:false,
+                    valueField:'id',
+                    displayField:'tname',
+                    readOnly:true,
+                    store:{
+                        autoLoad:false,
+                        fields:[{name:'id',type:'int'},{name:'tname',type:'string'}],
+                        proxy:{
+                            type:'ajax',
+                            url:'/myapp/dbTypes'
                         }
-                        else {
-                            setSourceType(this.up('form'),false);
+                    },
+                    listeners:{
+                        change:function(){
+
+                        },
+                        afterrender:function(){
+                           var me=this;
+                           this.up('window').down('#type').store.load({callback:function(){
+                               if(tp==2){
+                                   selectedNode=selection[0];
+                                   if(selectedNode.get('id_parent')!=0){
+                                       parentNode=selectedNode.parentNode;
+                                   }
+                                   else parentNode=selectedNode;
+                                   me.setValue(parentNode.get('id'));
+                               }   
+                           }});
                         }
                     }
+                },{
+                    xtype:'textfield',                
+                    fieldLabel:'IP',
+                    name:'ip',
+                    itemId:'ip',
+                    hidden:(tp==1)?true:false,
+                },{
+                    xtype:'textfield',                
+                    fieldLabel:'Порт',
+                    name:'port',
+                    itemId:'port',
+                    hidden:(tp==1)?true:false,
+                },{
+                    xtype:'textfield',                
+                    fieldLabel:'Логин',
+                    name:'login',
+                    itemId:'login',
+                    hidden:(tp==1)?true:false,
+                },{
+                    xtype:'textfield',                
+                    fieldLabel:'Пароль',
+                    name:'password',
+                    itemId:'password',
+                    hidden:(tp==1)?true:false,
+                }],
+                listeners:{
+                    beforerender:function(){
+                        rendercard(this); 
+                    }
                 }
-            },{
-                xtype:'textfield',                
-                fieldLabel:'IP',
-                name:'ip',
-                itemId:'ip'
-            },{
-                xtype:'textfield',                
-                fieldLabel:'Порт',
-                name:'port',
-                itemId:'port'
-            },{
-                xtype:'textfield',                
-                fieldLabel:'Логин',
-                name:'login',
-                itemId:'login'
-            },{
-                xtype:'textfield',                
-                fieldLabel:'Пароль',
-                name:'password',
-                itemId:'password'
             }],
-            listeners:{
-                beforerender:function(){
-                    rendercard(this); 
+            layout:'fit',
+            itemId:'openWindow',
+            buttons:[{
+                text:'Сохранить',
+                icon:'/static/app/img/save.png',
+                handler:function(){
+                    var me2=this;
+                    this.up('window').down('form').getForm().submit({url:'/myapp/addDb/',success:function(form,action){
+                        var node={'id':action.result.message,'text':me2.up('window').down('#name').getValue(),'leaf':(tp==1)?false:true};
+                        if(tp==1){
+                            var parentNode=me.up('viewport').down('databasesnavigtree').store.getRootNode();
+                            parentNode.insertBefore(node,parentNode.firstChild);
+                        }
+                        else if(tp==2){
+                            selectedNode=selection[0];
+                            if(selectedNode.get('id_parent')!=0){
+                                parentNode=selectedNode.parentNode;
+                            }
+                            else parentNode=selectedNode;
+                            parentNode.insertBefore(node,parentNode.firstChild);
+                        }
+                        me.up('viewport').down('databasesnavigtree').getSelectionModel().select(parentNode.firstChild,true);
+                        me2.up('window').destroy();    
+                        message('Операция завершена');                    
+                    }});
                 }
-            }
-        }],
-        layout:'fit',
-	    itemId:'openWindow',
-        buttons:[{
-            text:'Сохранить',
-            icon:'/static/app/img/save.png',
-            handler:function(){
-                var me=this;
-                this.up('window').down('form').getForm().submit({url:'/myapp/addDb/',success:function(form,action){
-                    me.up('window').destroy();    
-                    message('Операция завершена');                    
-                }});
-            }
-        },{
-            text:'Закрыть',
-            icon:'/static/app/img/close.png',
-            handler:function(){
-                this.up('window').destroy();
-            }
-        }]
-    }).show();
+            },{
+                text:'Закрыть',
+                icon:'/static/app/img/close.png',
+                handler:function(){
+                    this.up('window').destroy();
+                }
+            }]
+        }).show();      
+    }
 }
-
-function setSourceType(frm,bool){
-  frm.down('#ip').setVisible(bool);
-  frm.down('#port').setVisible(bool);
-  frm.down('#login').setVisible(bool);
-  frm.down('#password').setVisible(bool);
+function plotXY(frm){
+    var q=frm.down('#q') .getValue(),
+        y0=frm.down('#y0') .getValue(),
+        z0=frm.down('#z0').getValue(),
+        r=frm.down('#r').getValue();
+    var mymask1=new Ext.LoadMask({msg:'Происходит построение...',target:frm.up('viewport').down('#yOfTbottom')}),
+        mymask2=new Ext.LoadMask({msg:'Происходит построение...',target:frm.up('viewport').down('#xOfTbottom')});
+    mymask1.show();
+    mymask2.show();
+    Ext.Ajax.request({
+        url:'/myapp/plotXY/?q='+q+'&y0='+y0+'&z0='+z0+'&r='+r,
+        method:'GET',
+        success:function(res,req){
+            var image = Ext.decode(res.responseText,1);
+            
+            plot=frm.up('viewport').down('#yOfTbottom');
+            plot.items.each(function(el){
+                el.destroy();
+            });
+            var wd=frm.up('viewport').down('#yOfTbottom').getWidth()-20,
+               ht=frm.up('viewport').down('#yOfTbottom').getHeight()-20;
+            plot.add({xtype:'panel',height:ht,wisth:wd, html:'<img src="data:image/png;base64, '+image.yOfTbottom+'" width="'+wd+'px" height="'+ht+'px" style="width:'+wd+'px;height:'+ht+'px"/>'});         
+            mymask1.destroy();
+          
+            plot=frm.up('viewport').down('#xOfTbottom');
+            plot.items.each(function(el){
+                el.destroy();
+            });
+            var wd=frm.up('viewport').down('#xOfTbottom').getWidth()-20,
+               ht=frm.up('viewport').down('#xOfTbottom').getHeight()-20;
+            plot.add({xtype:'panel',height:ht,wisth:wd, html:'<img src="data:image/png;base64, '+image.xOfTbottom+'" width="'+wd+'px" height="'+ht+'px" style="width:'+wd+'px;height:'+ht+'px"/>'});         
+            mymask2.destroy();
+        }
+    });
 }
-
