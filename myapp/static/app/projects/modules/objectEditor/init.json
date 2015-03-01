@@ -1,4 +1,5 @@
 {
+    "locale"      :    "en",
     "databases":[{
         "id"      :    "0",
         "type"    :    "MySQL",
@@ -8,31 +9,38 @@
         "name"    :    "reestr"
      },{
         "id"      :    "1",
-        "type"    :    "MongoDb"
+        "type"    :    "MongoDb",
+        "ip"      :    "127.0.0.1",
+        "port"    :    "27017",
+        "name"    :    "reestr"
      },{
         "id"      :    "2",
         "type"    :    "MSSQL"
      },{
         "id"      :    "3",
-        "type"    :    "Postgre"
+        "type"    :    "Postgre",
+        "ip"      :    "127.0.0.1",
+        "user"    :    "postgres",
+        "password":    "postgres",
+        "name"    :    "reestr"
     }],
     "tables"      :    [{
         "name"    :    "object",
-        "id_db"   :    "0"
+        "id_db"   :    "3"
     },{
         "name"    :    "menu",
-        "id_db"   :    "0"
+        "id_db"   :    "3"
     },{
         "name"    :    "datatype",
-        "id_db"   :    "0"
+        "id_db"   :    "3"
     },{
         "name"    :    "object_1_",
-        "id_db"   :    "0"
+        "id_db"   :    "3"
     },{
         "name"    :    "history_1_",
-        "id_db"   :    "0"
+        "id_db"   :    "3"
     },{
         "name"    :    "archive_1_",
-        "id_db"   :    "0"
+        "id_db"   :    "3"
     }]
 } 

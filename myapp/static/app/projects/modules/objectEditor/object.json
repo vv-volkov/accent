@@ -81,7 +81,7 @@
             "attr_{{7}}_"    :    "Field",
             "attr_{{8}}_"    :    "Type",
             "attr_{{9}}_"    :    "datetime",
-            "attr_{{10}}_"    :    "varchar(255)",
+            "attr_{{10}}_"   :    "varchar(255)",
             "attr_{{11}}_"   :    "varchar(255)",
             "primary_key"    :    "id"
        }]

@@ -1,0 +1,19 @@
+{
+    "System.Users"        :   "Users",
+    "System.History"      :   "History",
+    "System.User"         :   "User",
+    "System.Operation"    :   "Operation",
+    "System.IP"           :   "IP",
+    "System.Name"         :   "Name",
+    "System.Field"        :   "Field",
+    "System.Type"         :   "Type",
+    "System.Time"         :   "Time",
+    "System.BeforeChange" :   "Before Change",
+    "System.AfterChange"  :   "After Change",
+    "System.String"       :   "String",
+    "System.Text"         :   "Text",
+    "System.Settings"     :   "Settings",
+    "System.ObjectEditor" :   "Object Editor",
+    "System.Password"     :   "Password",
+    "System.Login"        :   "Login"
+}
