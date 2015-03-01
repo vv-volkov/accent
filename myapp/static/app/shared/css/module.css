@@ -1,0 +1,30 @@
+.icon-refresh{
+    background-image:url("/static/app/img/sprite.png") !important; background-position: 0px 0px; width: 16px; height: 16px;
+}
+.icon-save{
+    background-image:url("/static/app/img/sprite.png") !important; background-position: -335px 0px; width: 16px; height: 16px;
+}
+.icon-delete{
+    background-image:url("/static/app/img/sprite.png") !important; background-position: -1227px 0px; width: 16px; height: 16px;
+}
+.icon-addobject{
+    background-image:url("/static/app/img/sprite.png") !important; background-position: -1536px 0px; width: 16px; height: 16px;
+}
+.icon-addfieldset{
+    background-image:url("/static/app/img/sprite.png") !important; background-position: -1555px 0px; width: 16px; height: 16px;
+}
+.icon-addfield{
+    background-image:url("/static/app/img/sprite.png") !important; background-position: -1574px 0px; width: 16px; height: 16px;
+}
+.icon-addsubobject{
+    background-image:url("/static/app/img/sprite.png") !important; background-position: -1594px 0px; width: 16px; height: 16px;
+}
+.icon-addclone{
+    background-image:url("/static/app/img/sprite.png") !important; background-position: -1614px 0px; width: 16px; height: 16px;
+}
+.icon-moveup{
+    background-image:url("/static/app/img/sprite.png") !important; background-position: -1667px 0px; width: 16px; height: 16px;
+}
+.icon-movedown{
+    background-image:url("/static/app/img/sprite.png") !important; background-position: -1682px 0px; width: 16px; height: 16px;
+}

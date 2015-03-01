@@ -1,0 +1,48 @@
+Ext.define('dynamics.controller.Main',{
+    extend:'Ext.app.Controller',
+    models:['FolderStrucModel'],
+    stores:['FolderStrucStore'],
+    views:['FolderStrucView','DynamicsProgramView'],
+    init:function(){
+        this.control({
+            'foldertree button[itemId=refreshTreeAll]':{
+                click:this.refreshAll
+            },
+            'foldertree menuitem[itemId=addFile]':{
+                click:this.addFile
+            },
+            'foldertree menuitem[itemId=addFolder]':{
+                click:this.addFolder
+            },
+            'foldertree menuitem[itemId=renameFile]':{
+                click:this.renameFile
+            },
+            'foldertree menuitem[itemId=renameFolder]':{
+                click:this.renameFolder
+            },
+            'foldertree menuitem[itemId=removeFile]':{
+                click:this.removeFile
+            },
+            'foldertree menuitem[itemId=removeFolder]':{
+                click:this.removeFolder
+            }
+        });
+    },
+    refreshAll:function(btn){
+        btn.up('panel').store.load();
+    },
+    addFile:function(menuitem){
+        createFileFolder(menuitem.up('button').up('panel'),1);
+    },
+    addFolder:function(menuitem){
+        createFileFolder(menuitem.up('button').up('panel'),2);
+    },
+    renameFile:function(menuitem){
+        renameFileFolder(menuitem.up('button').up('panel'),1);
+    },
+    renameFolder:function(menuitem){
+        renameFileFolder(menuitem.up('button').up('panel'),2);
+    }
+  
+  
+})

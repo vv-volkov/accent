@@ -1,0 +1,23 @@
+Ext.define('matrix.view.matrixNavigTree',{
+    extend:'Ext.tree.Panel',
+    store:'matrixNavigStore',
+    alias:'widget.matrixnavigtree',
+    rootVisible:false,
+    border:false,
+    viewConfig:{
+        plugins:{
+            ptype:'treeviewdragdrop',
+            enableDrag:true
+        }
+    },
+    dockedItems:[{
+        xtype:'toolbar',
+        itemId:'foldertbar',
+        items:[{
+            xtype:'button',
+            icon:'/static/app/img/refresh.png',
+            tooltip:'Обновить дерево',
+            itemId:'refresh'
+        },'-']
+    }]
+});

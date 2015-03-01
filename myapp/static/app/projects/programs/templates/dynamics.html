@@ -1,0 +1,41 @@
+<div id="math" name="math" class="x-hidden" style="padding:4px">
+  $\textbf{Исходная система:} 
+  \\ \begin{cases} m \ddot x = z E - m g & 0 < x < d 
+  \\ \dot z = G \end{cases} \\ \begin{cases} y_+ = R y_- 
+  \\ z = \begin{cases} z(x = 0) = z_0 & x = 0 \text{ или } x = d 
+  \\ z(x = d) = -z_0 \end{cases} \end{cases} 
+  \\ \textbf{В безразмерных координатах:} 
+  \\ \begin{cases} \dot x = y 
+  \\ \dot y = z - 1 & 0 < x < 1 
+  \\ \dot z = q \end{cases} 
+  \\ \begin{cases} y_+ = -R y_- 
+  \\ z = \begin{cases} z(x = 0) = z_0 & x = 0 \text{ или } x = 1 
+  \\ z(x = 1) = -z_0 \end{cases}\end{cases}
+  \\ \textbf{Уравнения движения с нижней пластины } (x_0 = 0, y_0 > 0):
+  \\ \begin{cases} x = \cfrac{q t^3}{6} + \cfrac{(z_0 - 1) t^2 }{2} + y_0 t
+  \\ y = \cfrac{q t^2}{2} + (z_0 - 1) t + y_0
+  \\ z = q t + z_0
+  \end{cases}
+  \\ \textbf{Уравнения движения с верхней пластины } (x_0 = 1, y_0 < 0):
+  \\ \begin{cases} x = \cfrac{q t^3}{6} - \cfrac{(z_0 + 1) t^2 }{2} + y_0 t + 1
+  \\ y = \cfrac{q t^2}{2} - (z_0 + 1) t + y_0
+  \\ z = q t - z_0
+  \end{cases}
+  \\ \textbf{Функция последования для возвратного движения }
+  \\ \textbf{с плоскости } x_0 = 0:
+  \\ y_1 = R ( 2 y_0 - \cfrac{3 (z_0 - 1)^2}{4q} - \cfrac{R (z_0 - 1) \sqrt{9 (z_0 - 1)^2 - 24 q y_0}}{4q}) 
+  \\ \textbf{Функция последования для возвратного движения }
+  \\ \textbf{с плоскости } x_0 = 1:
+  \\ y_1 = R ( 2 y_0 - \cfrac{3 (z_0 + 1)^2}{4q} - \cfrac{R (z_0 + 1) \sqrt{9 (z_0 + 1)^2 - 24 q y_0}}{4q}) 
+  \\ \textbf{Функция последования для двухударного движения }
+  \\ \begin{cases} \cfrac{q t_1^3}{6} + \cfrac{(z_0 - 1) t_1^2}{2} + y_0 t_1 = 1
+  \\ -R(\cfrac{q t_1^2}{2} + (z_0 - 1) t_1 + y_0) = y_1
+  \\ \cfrac{q t_2^3}{6} + \cfrac{(z_0 - 1) t_2^2}{2} + y_0 t_2 + 1 = 0
+  \\ -R(\cfrac{q t_2^2}{2} + (z_0 - 1) t + y_1) = y_2
+  \end{cases}
+  $
+</div>
+<div id="q" name="q" class="x-hidden">$ q $</div>
+<div id="y0" name="y0" class="x-hidden">$ y_0 $</div>
+<div id="z0" name="z0" class="x-hidden">$ z_0 $</div>
+<div id="R" name="R" class="x-hidden">$ R $</div>

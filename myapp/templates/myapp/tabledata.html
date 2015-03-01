@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/ext-5.0.1/packages/ext-theme-classic/build/resources/ext-theme-classic-all.css">
+    <script type="text/javascript" src="/static/ext-5.0.1/build/ext-all.js"></script>
+    <script type="text/javascript" src="/static/ext-5.0.1/build/packages/ext-locale/build/ext-locale-ru.js"></script>
+    <script type="text/javascript" src="/static/app/shared/js/sharedFuncs.js"></script>
+    <script type="text/javascript">
+       Ext.Loader.setConfig({enabled:true, disableCaching:true});
+       Ext.Loader.setPath('Ext.ux','/static/ext-5.0.1/examples/ux');
+       Ext.require(['*']);
+       Ext.onReady(function(){            
+           Ext.tip.QuickTipManager.init();          
+           Ext.Ajax.request({
+               url:"/myapp/tablecolumns/?database={{database}}&table={{table}}&row={{row}}",
+               method:'GET',
+               success:function(res,req){
+                   var columns=Ext.decode(res.responseText,1);
+                   Ext.create('Ext.data.BufferedStore',{
+                      autoLoad:true,
+                      storeId:'tabledatagrid',
+                      fields:columns,
+                      leadingBufferZone:300,
+                      pageSize:100,
+                      proxy:{
+                          type:'ajax',
+                          url:'/myapp/tablegrid/?database={{database}}&table={{table}}&row={{row}}',
+                          reader:{
+                              type:'json',
+                              root:'items'
+                          }
+                      }
+                   }); 
+                   Ext.create('Ext.container.Viewport',{
+                       layout:'border',
+                       items:[{
+                           region:'center',
+                           layout:'fit',
+                           border:false,                           
+                           xtype:'grid',
+                           store: Ext.data.StoreManager.lookup('tabledatagrid'),
+                           selModel:Ext.create('Ext.selection.CheckboxModel',{mode:'SINGLE'}),
+                           columns:columns,
+                           columnLines:true,
+                           dockedItems:[{
+                               xtype:'toolbar',
+                               border:false,
+                               items:[{
+                                   xtype:'button',
+                                   icon:'/static/app/img/refresh.png',
+                                   tooltip:'Обновить',
+                                   handler:function(){
+                                       this.up('viewport').down('grid').store.load();
+                                   }
+                               }]
+                           }]
+                       }]
+                   });                   
+               }
+           });
+       });      
+    </script>
+  </head>
+</html>

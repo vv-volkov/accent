@@ -1,0 +1,69 @@
+Ext.Loader.setConfig({enabled:true, disableCaching:true});
+
+Ext.Loader.setPath('Ext.ux','/static/ext-5.0.1/examples/ux');
+
+Ext.require(['Ext.ux.TabReorderer','Ext.ux.BoxReorderer','Ext.ux.TabCloseMenu']);
+
+Ext.application({
+    name:'init',
+    appFolder:'/static/app/projects/',
+    requires:[
+        'Ext.container.Viewport',
+        'Ext.layout.container.Border'
+    ],
+    controllers:['FolderStrucController'],
+    autoCreateViewport:false,
+    launch:function(){
+        Ext.create('Ext.container.Viewport',{
+            layout:'border',
+            items:[{
+                region:'west',
+                layout:'fit',
+                width:280,
+                collapsible:true,
+                collapseMode:'mini',
+                split:true,
+                autoScroll:true,
+                items:[{
+                    xtype:'foldertree'
+                }]            
+            },{
+                region:'center',
+                xtype:'tabpanel',
+                layout:'fit',
+                itemId:'customTabPanel',
+                plugins:['tabreorderer',
+                    Ext.create('Ext.ux.TabCloseMenu',{
+                        closeTabText:'Закрыть вкладку',   
+                        closeOthersTabsText:'Закрыть другие вкладки',
+                        closeAllTabsText:'Закрыть все вкладки',
+                        extraItemsTail:['-',{
+                            text:'Обновить вкладку',
+                            icon:'/static/app/img/refresh.png',
+                            handler:function(){
+                                var tab=Ext.ComponentQuery.query('#customTabPanel')[0].getActiveTab();
+                                if(tab.src||tab.contentEl)tab.contentEl.contentDocument.location.reload(true);                                
+                            }
+                        },{
+                            text:'Во весь экран',
+                            icon:'/static/app/img/fullscreen.png',
+                            handler:function(){
+                                var tab=Ext.ComponentQuery.query('#customTabPanel')[0].getActiveTab();
+                                alert(tab.src);
+                                if(tab.src) window.open(tab.src,'_blank');
+                            }
+                        }]
+                    })
+                ], 
+                items:[{
+                    title:'Программа',
+                    closable:false,
+                    icon:'/static/app/img/run.png',
+                    layout:'fit',
+                    border:false,
+                    html:'<iframe src="/myapp/program/?program='+Ext.urlDecode(location.search.substring(1)).program+'" frameborder="0" scrolling="0" style="border:0px none;width:100%;height:100%"></iframe>',
+                }]
+            }]
+        });
+    }
+});

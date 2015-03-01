@@ -1,0 +1,8 @@
+[{"xtype":"button","text":"Динамические системы","scale":"large","padding":"2 0 2 0","width":"140","arrowAlign":"bottom","icon":"/static/app/img/gauge_32.png","iconAlign":"top",
+"menu":[{"text":"Динамика частицы в поле плоского конденсатора","url":"projects/?program=dynamics",handler:function(){createTabIframe(this,this.url,this.text)}}]},
+{"xtype":"button","text":"Численные методы","scale":"large","padding":"2 0 2 0","width":"140","arrowAlign":"bottom","icon":"/static/app/img/numeric.png","iconAlign":"top",
+"menu":[{"text":"Методы оптимизации","menu":[{"text":"Градиентный спуск","url":"projects/?program=graddescent",handler:function(){
+createTabIframe(this,this.url,this.text)
+}},{"text":"Метод Хука-Дживса","url":"projects/?program=patternsearch",handler:function(){
+createTabIframe(this,this.url,this.text)
+}}]}]}]

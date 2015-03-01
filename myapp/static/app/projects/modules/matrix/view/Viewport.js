@@ -1,0 +1,45 @@
+Ext.define('matrix.view.Viewport',{
+    extend:'Ext.container.Viewport',
+    layout:'fit',    
+    initComponent:function(){
+        Ext.apply(this,{
+            layout:{
+                type:'border'
+            },
+            items:[{
+                region:'north',
+                xtype:'toolbar',
+                itemId:'topMenu',
+                ui:'footer',
+                padding:'2 4 2 4',
+                height:74,
+                bodyStyle:'background-color:#DEECFC',
+                border:0,  
+                plugins:Ext.create('Ext.ux.BoxReorderer',{}),
+                listeners:{
+                    beforerender:function(){
+                        
+                    }
+                }
+            },{
+                region:'west',
+                layout:'fit',
+                width:280,
+                collapsible:true,
+                collapseMode:'mini',
+                split:true,
+                autoScroll:true,
+                items:[{
+                    xtype:'matrixnavigtree'
+                }]
+            },{
+                region:'center',
+                xtype:'tabpanel',
+                layout:'fit',
+                itemId:'topTab',
+                plugins:['tabreorderer']                
+            }]
+        });
+        this.callParent(arguments);
+    }
+});

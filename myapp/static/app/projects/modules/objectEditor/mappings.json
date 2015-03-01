@@ -1,0 +1,14 @@
+{
+    "0":{
+        "auto_increment"  :    "bigint not null auto_increment",
+        "int"             :    "int not null",
+        "int(0)"          :    "int not null default 0",
+        "tinyint(0)"      :    "tinyint not null default 0",
+        "varchar(55)"     :    "varchar(55)",
+        "varchar(255)"    :    "varchar(255)",
+        "datetime"        :    "datetime",
+        "User"            :    "int not null default 0",
+        "Type"            :    "tinyint not null default 0",
+        "Field"           :    "int not null default 0"
+    }
+}

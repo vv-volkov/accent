@@ -1,0 +1,215 @@
+{  
+    "create":{
+        "datatype":{
+            "id"             :    "int",
+            "code"           :    "varchar(255)",
+            "name"           :    "varchar(255)"
+        },
+        "object":{
+            "id"             :    "int",
+            "id_inherit"     :    "int(0)",
+            "id_parent"      :    "int(0)",
+            "id_obj"         :    "int(0)",
+            "id_type"        :    "int(0)",
+            "if_sys"         :    "tinyint(0)",
+            "if_hist"        :    "tinyint(0)",
+            "if_user"        :    "tinyint(0)",
+            "db_type"        :    "tinyint(0)",
+            "hist_type"      :    "tinyint(0)",
+            "name"           :    "varchar(255)"
+        },
+        "menu":{
+            "id"             :    "int",
+            "id_parent"      :    "int(0)",
+            "id_obj"         :    "int(0)",
+            "name"           :    "varchar(255)"
+        },
+        "object_1_":{
+            "id"             :    "int",
+            "id_inherit"     :    "int",
+            "id_obj"         :    "int",
+            "id_color"       :    "int",
+            "id_text"        :    "int",
+            "attr_5_"        :    "varchar(55)",
+            "attr_6_"        :    "User",
+            "attr_7_"        :    "Field",
+            "attr_8_"        :    "Type",
+            "attr_9_"        :    "datetime",
+            "attr_10_"       :    "varchar(255)",
+            "attr_11_"       :    "varchar(255)",
+            "attr_12_"       :    "varchar(255)"
+       },
+       "history_1_":{
+            "id"             :    "int",
+            "id_inherit"     :    "int",
+            "id_obj"         :    "int",
+            "id_color"       :    "int",
+            "id_text"        :    "int",
+            "attr_5_"        :    "varchar(55)",
+            "attr_6_"        :    "User",
+            "attr_7_"        :    "Field",
+            "attr_8_"        :    "Type",
+            "attr_9_"        :    "datetime",
+            "attr_10_"       :    "varchar(255)",
+            "attr_11_"       :    "varchar(255)",
+            "attr_12_"       :    "varchar(255)"
+       },
+       "archive_1_":{
+            "id"             :    "int",
+            "id_inherit"     :    "int",
+            "id_obj"         :    "int",
+            "id_color"       :    "int",
+            "id_text"        :    "int",
+            "attr_5_"        :    "varchar(55)",
+            "attr_6_"        :    "User",
+            "attr_7_"        :    "Field",
+            "attr_8_"        :    "Type",
+            "attr_9_"        :    "datetime",
+            "attr_10_"       :    "varchar(255)",
+            "attr_11_"       :    "varchar(255)",
+            "attr_12_"       :    "varchar(255)"
+       }
+    },
+    "insert":{
+        "datatype":[{
+            "id"    :    "1",
+            "code"  :    "varchar(255)",
+            "name"  :    "Db.String"
+        },{
+            "id"    :    "2",
+            "code"  :    "varchar(255)",
+            "name"  :    "Db.IP"
+        },{
+            "id"    :    "3",
+            "code"  :    "User",
+            "name"  :    "Db.User"
+        },{
+            "id"    :    "4",
+            "code"  :    "Field",
+            "name"  :    "Db.Field"
+        },{
+            "id"    :    "5",
+            "code"  :    "Type",
+            "name"  :    "Db.Type"
+        },{
+            "id"    :    "6",
+            "code"  :    "datetime",
+            "name"  :    "Db.Time"
+        },{
+            "id"    :    "7",
+            "code"  :    "varchar(255)",
+            "name"  :    "Db.BeforeChange"
+        },{
+            "id"    :    "8",
+            "code"  :    "varchar(255)",
+            "name"  :    "Db.AfterChange"
+        },{
+            "id"    :    "9",
+            "code"  :    "varchar(255)",
+            "name"  :    "Db.Password"
+        },{
+            "id"    :    "10",
+            "code"  :    "varchar(255)",
+            "name"  :    "Db.Login"
+        }],
+       "object":[{
+            "id"        :    "1",
+            "name"      :    "Db.Users",
+            "if_user"   :    "1"
+        },{
+            "id"        :    "2",
+            "id_parent" :    "1",
+            "id_obj"    :    "1",
+            "name"      :    "Db.History",
+            "if_hist"   :    "1"
+        },{
+            "id"        :    "3",
+            "id_parent" :    "2",
+            "id_obj"    :    "1",
+            "name"      :    "Db.User",
+            "if_hist"   :    "1"
+        },{
+            "id"        :    "4",
+            "id_parent" :    "2",
+            "id_obj"    :    "1",
+            "name"      :    "Db.Operation"
+        },{
+            "id"        :    "5",
+            "id_parent" :    "3",
+            "id_obj"    :    "1",
+            "name"      :    "Db.IP",
+            "if_hist"   :    "1"
+        },{
+            "id"        :    "6",
+            "id_parent" :    "3",
+            "id_obj"    :    "1",
+            "name"      :    "Db.Name",
+            "id_type"   :    "3",
+            "if_hist"   :    "1"
+        },{
+            "id"        :    "7",
+            "id_parent" :    "4",
+            "id_obj"    :    "1",
+            "name"      :    "Db.Field",
+            "id_type"   :    "4",
+            "if_hist"   :    "1"
+        },{
+            "id"        :    "8",
+            "id_parent" :    "4",
+            "id_obj"    :    "1",
+            "name"      :    "Db.Type",
+            "id_type"   :    "5",
+            "if_hist"   :    "1"
+        },{
+            "id"        :    "9",
+            "id_parent" :    "4",
+            "id_obj"    :    "1",
+            "name"      :    "Db.Time",
+            "id_type"   :    "6",
+            "if_hist"   :    "1"
+        },{
+            "id"        :    "10",
+            "id_parent" :    "4",
+            "id_obj"    :    "1",
+            "name"      :    "Db.BeforeChange",
+            "id_type"   :    "7",
+            "if_hist"   :    "1"
+        },{
+            "id"        :    "11",
+            "id_parent" :    "4",
+            "id_obj"    :    "1",
+            "name"      :    "Db.AfterChange",
+            "id_type"   :    "8",
+            "if_hist"   :    "1"
+        },{
+            "id"        :    "12",
+            "id_parent" :    "1",
+            "id_obj"    :    "1",
+            "name"      :    "Db.Login",
+            "id_type"   :    "9",
+            "if_hist"   :    "0"
+        },{
+            "id"        :    "13",
+            "id_parent" :    "1",
+            "id_obj"    :    "1",
+            "name"      :    "Db.Password",
+            "id_type"   :    "10",
+            "if_hist"   :    "0"
+        }],
+        "menu":[{
+            "id"        :    "1",
+            "name"      :    "Db.Settings"
+        },{
+            "id"        :    "2",
+            "id_parent" :    "1",
+            "name"      :    "Db.ObjectEditor"
+        }],
+        "object_1_":[{
+            "id"        :    "1",
+            "id_obj"    :    "1",
+            "attr_5_"   :    "127.0.0.1",
+            "attr_12_"  :    "admin",
+            "attr_13_"  :    "admin"
+        }]
+    }
+}

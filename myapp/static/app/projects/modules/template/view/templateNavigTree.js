@@ -1,0 +1,23 @@
+Ext.define('template.view.templateNavigTree',{
+    extend:'Ext.tree.Panel',
+    store:'templateNavigStore',
+    alias:'widget.templatenavigtree',
+    rootVisible:false,
+    border:false,
+    viewConfig:{
+        plugins:{
+            ptype:'treeviewdragdrop',
+            enableDrag:true
+        }
+    },
+    dockedItems:[{
+        xtype:'toolbar',
+        itemId:'foldertbar',
+        items:[{
+            xtype:'button',
+            icon:'/static/app/img/refresh.png',
+            tooltip:'Обновить дерево',
+            itemId:'refresh'
+        },'-']
+    }]
+});

@@ -1,0 +1,4 @@
+subroutine numfor()
+    open(1,file='test.txt',status='replace')
+    write(1,*) "Hello from Django!"
+end subroutine numfor

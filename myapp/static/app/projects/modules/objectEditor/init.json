@@ -1,0 +1,38 @@
+{
+    "databases":[{
+        "id"      :    "0",
+        "type"    :    "MySQL",
+        "ip"      :    "127.0.0.1",
+        "user"    :    "root",
+        "password":    "root",
+        "name"    :    "reestr"
+     },{
+        "id"      :    "1",
+        "type"    :    "MongoDb"
+     },{
+        "id"      :    "2",
+        "type"    :    "MSSQL"
+     },{
+        "id"      :    "3",
+        "type"    :    "Postgre"
+    }],
+    "tables"      :    [{
+        "name"    :    "object",
+        "id_db"   :    "0"
+    },{
+        "name"    :    "menu",
+        "id_db"   :    "0"
+    },{
+        "name"    :    "datatype",
+        "id_db"   :    "0"
+    },{
+        "name"    :    "object_1_",
+        "id_db"   :    "0"
+    },{
+        "name"    :    "history_1_",
+        "id_db"   :    "0"
+    },{
+        "name"    :    "archive_1_",
+        "id_db"   :    "0"
+    }]
+} 

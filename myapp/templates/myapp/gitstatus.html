@@ -1,0 +1,116 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/ext-5.0.1/packages/ext-theme-classic/build/resources/ext-theme-classic-all.css">
+    <script type="text/javascript" src="/static/ext-5.0.1/build/ext-all.js"></script>
+    <script type="text/javascript" src="/static/ext-5.0.1/build/packages/ext-locale/build/ext-locale-ru.js"></script>
+    <script type="text/javascript" src="/static/app/shared/js/sharedFuncs.js"></script>
+    <script type="text/javascript">
+       Ext.Loader.setConfig({enabled:true, disableCaching:true});
+       Ext.Loader.setPath('Ext.ux','/static/ext-5.0.1/examples/ux');
+       Ext.require(['*']);
+       Ext.onReady(function(){            
+           Ext.tip.QuickTipManager.init();         
+           Ext.create('Ext.data.JsonStore',{
+              autoLoad:true,
+              storeId:'gitmodified',
+              fields:['filename'],
+              proxy:{
+                  type:'ajax',
+                  url:'/myapp/gitmodified/',
+                  reader:{
+                      type:'json'
+                  }
+              }
+           });         
+           Ext.create('Ext.container.Viewport',{
+               layout:'border',
+               items:[{
+                   region:'center',
+                   layout:'fit',
+                   border:false,
+                   dockedItems:[{
+                       xtype:'toolbar',
+                       border:false,
+                       items:[{
+                           xtype:'button',
+                           tooltip:'Обновить',
+                           icon:'/static/app/img/refresh.png',
+                           handler:function(){
+                               this.up('viewport').down('grid').store.load();
+                           }
+                       },'-',{
+                           xtype:'button',
+                           tooltip:'Добавить',
+                           icon:'/static/app/img/add.png',
+                           handler:function(){
+                               var me=this,grid=this.up('viewport').down('grid'),
+                               records=grid.getSelectionModel().getSelection(),
+                               filenames=[],values=[];
+                               if(records.length){
+                                   Ext.MessageBox.show({
+                                       title:'Сообщение',
+                                       msg:'',
+                                       buttons:Ext.MessageBox.OKCANCEL,
+                                       prompt:true,
+                                       fn:function(btn,txt,cBoxes){
+                                           if(btn=='ok'&&txt!=""){
+                                               for(var i=0;i<records.length;i++){
+                                                   values.push(records[i].get('filename'))
+                                                   filenames.push([records[i].get('filename')]);
+                                               }
+                                               var frm=Ext.create('Ext.form.Panel',{
+                                                   method:'POST',
+                                                   standardSubmit:false,
+                                                   items:[{
+                                                       xtype:'textfield',
+                                                       name:'msg',
+                                                       value:txt
+                                                   },{
+                                                       xtype:'textarea',
+                                                       name:'filenames',
+                                                       value:JSON.stringify(values)
+                                                   }]
+                                               }),
+                                               mymask=new Ext.LoadMask(grid,{msg:'Операция выполняется'});
+                                               mymask.show();
+                                               frm.getForm().submit({url:'/myapp/gitAdd/',success:function(form,action){
+                                                   mymask.destroy();
+                                                   Ext.MessageBox.show({
+                                                       title:'Внимание',
+                                                       msg:'Передать на сервер?',
+                                                       closable:true,
+                                                       buttons:Ext.Msg.OKCANCEL,
+                                                       fn:function(btn){
+                                                           if(btn=='ok') doGitPush(me);
+                                                           grid.store.remove(records);
+                                                       }
+                                                   });
+                                               }});
+                                           }
+                                           else {
+                                               Ext.Msg.alert('Внимание','Необходимо указать сообщение');        
+                                           }                    
+                                       }  
+                                   });
+                               }
+                               else {
+                                   Ext.Msg.alert('Внимание','Необходимо выбрать хотя бы один файл');                               
+                               }      
+                           }
+                       }]
+                   }],
+                   items:[{
+                       xtype:'grid',
+                       border:false,
+                       store: Ext.data.StoreManager.lookup('gitmodified'),
+                       selModel:Ext.create('Ext.selection.CheckboxModel'),
+                       columns:[{ 
+                           text:'Имя файла',dataIndex:'filename',flex:1
+                       }]
+                   }]
+               }]
+           });
+       });      
+    </script>
+  </head>
+</html>

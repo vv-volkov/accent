@@ -1,0 +1,89 @@
+[{
+    "rows":[{
+        "id"        :    "{{1}}",
+        "name"      :    "{{$Object.Name}}"
+    },{
+        "id"        :    "{{2}}",
+        "id_parent" :    "{{1}}",
+        "id_obj"    :    "{{1}}",
+        "name"      :    "Db.History",
+        "if_hist"   :    "1"
+    },{
+        "id"        :    "{{3}}",
+        "id_parent" :    "{{2}}",
+        "id_obj"    :    "{{1}}",
+        "name"      :    "Db.User",
+        "if_hist"   :    "1"
+    },{
+        "id"        :    "{{4}}",
+        "id_parent" :    "{{2}}",
+        "id_obj"    :    "{{1}}",
+        "name"      :    "Db.Operation"
+    },{
+        "id"        :    "{{5}}",
+        "id_parent" :    "{{3}}",
+        "id_obj"    :    "{{1}}",
+        "name"      :    "Db.IP",
+        "if_hist"   :    "1"
+    },{
+        "id"        :    "{{5}}",
+        "id_parent" :    "{{2}}",
+        "id_obj"    :    "{{0}}",
+        "name"      :    "Db.Name",
+        "id_type"   :    "3",
+        "if_hist"   :    "1"
+    },{
+        "id"        :    "{{7}}",
+        "id_parent" :    "{{4}}",
+        "id_obj"    :    "{{1}}",
+        "name"      :    "Db.Field",
+        "id_type"   :    "4",
+        "if_hist"   :    "1"
+    },{
+        "id"        :    "{{8}}",
+        "id_parent" :    "{{4}}",
+        "id_obj"    :    "{{1}}",
+        "name"      :    "Db.Type",
+        "id_type"   :    "5",
+        "if_hist"   :    "1"
+    },{
+        "id"        :    "{{9}}",
+        "id_parent" :    "{{4}}",
+        "id_obj"    :    "{{1}}",
+        "name"      :    "Db.Time",
+        "id_type"   :    "6",
+        "if_hist"   :    "1"
+    },{
+        "id"        :    "{{10}}",
+        "id_parent" :    "{{4}}",
+        "id_obj"    :    "{{1}}",
+        "name"      :    "Db.BeforeChange",
+        "id_type"   :    "7",
+        "if_hist"   :    "1"
+    },{
+        "id"        :    "{{11}}",
+        "id_parent" :    "{{4}}",
+        "id_obj"    :    "{{1}}",
+        "name"      :    "Db.AfterChange",
+        "id_type"   :    "8",
+        "if_hist"   :    "1"
+    }] 
+},{
+    "tables":[{
+        "object_{{1}}_":[{
+            "id"             :    "auto_increment",
+            "id_inherit"     :    "int",
+            "id_obj"         :    "int",
+            "id_color"       :    "int",
+            "id_text"        :    "int",
+            "attr_{{5}}_"    :    "varchar(55)",
+            "attr_{{6}}_"    :    "User",
+            "attr_{{7}}_"    :    "Field",
+            "attr_{{8}}_"    :    "Type",
+            "attr_{{9}}_"    :    "datetime",
+            "attr_{{10}}_"    :    "varchar(255)",
+            "attr_{{11}}_"   :    "varchar(255)",
+            "primary_key"    :    "id"
+       }]
+    }]
+}]

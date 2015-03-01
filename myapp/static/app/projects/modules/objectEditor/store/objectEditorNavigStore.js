@@ -1,0 +1,19 @@
+Ext.define('objectEditor.store.objectEditorNavigStore',{
+    extend:'Ext.data.TreeStore',
+    model:'objectEditor.model.objectEditorNavigModel',
+    autoLoad:true,
+    proxy:{
+        type:'ajax',
+        url:'/myapp/folderstruc'
+    },
+    snapshot:{
+        text:'',
+        expanded:true,
+        id:'./myapp/'
+    },
+    root:{
+        text:'',
+        expanded:true,
+        id:'./myapp/static/app/projects/modules/objectEditor/'
+    }
+});

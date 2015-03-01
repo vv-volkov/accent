@@ -1,0 +1,130 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/ext-5.0.1/packages/ext-theme-classic/build/resources/ext-theme-classic-all.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/app/shared/css/shared.css"/>
+    <script type="text/javascript" src="/static/ext-5.0.1/build/ext-all.js"></script>
+    <script type="text/javascript" src="/static/ext-5.0.1/build/packages/ext-locale/build/ext-locale-ru.js"></script>
+    <script type="text/javascript" src="/static/app/shared/js/sharedFuncs.js"></script>
+    <script type="text/javascript">
+       Ext.Loader.setConfig({enabled:true, disableCaching:true});
+       Ext.Loader.setPath('Ext.ux','/static/ext-5.0.1/examples/ux');
+       Ext.require(['*']);
+       Ext.onReady(function(){            
+           Ext.tip.QuickTipManager.init();         
+           Ext.create('Ext.data.JsonStore',{
+              autoLoad:true,
+              storeId:'databasetable',
+              fields:['table'],
+              proxy:{
+                  type:'ajax',
+                  url:'/myapp/databasetablelist/',
+                  reader:{
+                      type:'json'
+                  }
+              }
+           });         
+           Ext.create('Ext.container.Viewport',{
+               layout:'border',
+               items:[{
+                   region:'center',
+                   layout:'fit',
+                   border:false,
+                   dockedItems:[{
+                       xtype:'toolbar',
+                       border:false,
+                       items:[{
+                           xtype:'button',
+                           tooltip:'',
+                           icon:'/static/app/img/refresh.png',
+                           handler:function(){
+                               this.up('viewport').down('grid').store.load()  
+                           }
+                       },'-',{
+                           xtype:'button',
+                           tooltip:'Содержимое таблицы',
+                           icon:'/static/app/img/table.png',
+                           handler:function(){
+                             var selection=this.up('viewport').down('grid').getSelectionModel().getSelection()[0],
+                             tab=createTabIframe(window.parent.Ext.ComponentQuery.query('tabpanel')[0],'tabledata/?database=Property_MinGosIm&table='+selection.get('table')
+                                                 +'&row=null','Property_MinGosIm :: '+selection.get('table'));
+                             
+                           }
+                       },'',{
+                           xtype:'button',
+                           tooltip:'Сопоставление полей',
+                           icon:'/static/app/img/match.png',
+                           handler:function(){
+                               var me=this,
+                               selection=me.up('viewport').down('grid').getSelectionModel().getSelection()[0];
+							   if(selection){
+                                   var args={'database':'Property_MinGosIm','table':selection.get('table'),'row':null};
+                                   createWindowFormAction(me.up('viewport'),0,me.tooltip,true,args,me.icon,'POST',true,function(){
+                                       var frm=Ext.ComponentQuery.query('#openForm')[0];
+                                       frm.insert(0,[{'xtype':'combobox','width':'50%','name':'TABLEDST','labelWidth':'50%','fieldLabel':'ТАБЛИЦА *','labelSeparator':'',
+                                                     'allowBlank':false,'store':[['users','Пользователи']]},{'xtype':'textfield','hidden':true,'name':'TABLESRC',value:selection.get('table')}])
+                                   },function(){
+                                       var frm=Ext.ComponentQuery.query('#openForm')[0];
+                                       frm.getForm().submit({
+                                           url:'/myapp/saveMatchAttr',
+                                           method:'POST',
+                                           submitEmptyText:false,
+                                           standardSubmit:false,
+                                           success:function(form,action){
+                                               Ext.ComponentQuery.query('#openWindow')[0].destroy();   
+                                           }
+                                       })
+                                   });
+							   }
+							   else {
+							       Ext.MessageBox.show({
+								       title:'Внимание',
+								       msg:'Необходимо выбрать таблицу',
+								       closable:true,
+								       buttons:Ext.Msg.OK
+								   });
+							   }
+                           }
+                       },'',{
+                           xtype:'button',
+                           tooltip:'Экспорт данных',
+                           icon:'/static/app/img/export.png',
+                           handler:function(){
+                               var me=this,
+                               selection=me.up('viewport').down('grid').getSelectionModel().getSelection()[0];
+                               if(selection){
+                                   ajaxRequest('/myapp/exportdata/?tablesrc='+selection.get('table'),'GET',{},function(){
+                                       Ext.MessageBox.show({
+								           title:'Внимание',
+								           msg:'Операция выполнена',
+								           closable:true,
+								           buttons:Ext.Msg.OK
+								       });
+                                   });
+                               }
+                               else {
+                                   Ext.MessageBox.show({
+								       title:'Внимание',
+								       msg:'Необходимо выбрать таблицу',
+								       closable:true,
+								       buttons:Ext.Msg.OK
+								   });
+                               }
+                           }
+                       }]
+                   }],
+                   items:[{
+                       xtype:'grid',
+                       border:false,
+                       store:Ext.data.StoreManager.lookup('databasetable'),
+                       selModel:Ext.create('Ext.selection.CheckboxModel',{mode:'SINGLE'}),
+                       columnLines:true,
+                       columns:[{ 
+                           text:'Таблица',dataIndex:'table',flex:1
+                       }]
+                   }]
+               }]
+           });
+       });      
+    </script>
+  </head>
+</html>

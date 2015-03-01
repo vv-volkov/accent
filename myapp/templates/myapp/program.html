@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/ext-5.0.1/packages/ext-theme-classic/build/resources/ext-theme-classic-all.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/app/shared/css/shared.css" />
+    <script type="text/javascript" src="/static/ext-5.0.1/build/ext-all.js"></script>
+    <script type="text/javascript" src="/static/ext-5.0.1/build/packages/ext-locale/build/ext-locale-ru.js"></script>
+    <script type="text/javascript" src="/static/app/shared/js/sharedFuncs.js"></script>
+    <script type="text/javascript" src="/static/app/shared/js/overrides.js"></script>
+    <script type="text/javascript" src="/static/app/projects/programs/{{program}}.js"></script>
+    <script type="text/javascript" src="/static/app/shared/js/MathJax-2.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+        });
+        Ext.Loader.setConfig({enabled:true, disableCaching:true});
+        Ext.Loader.setPath('Ext.ux','/static/ext-5.0.1/examples/ux');
+        Ext.require(['*']);
+        Ext.onReady(function(){            
+           Ext.tip.QuickTipManager.init();  
+           Ext.create('Ext.container.Viewport',{
+               layout:'fit',
+               border:false,
+               items:[{
+                   xtype:"{{program}}"
+               }]
+           });
+        });      
+    </script>
+  </head>
+  <body>
+      {% with template_name=program|add:".html" %}
+          {% include template_name %}
+      {% endwith %}
+  </body>
+</html>
