@@ -16,6 +16,7 @@ import string
 import pyodbc
 import pypyodbc
 import jsonpickle
+<<<<<<< HEAD
 import re
 import MySQLdb
 import StringIO
@@ -29,6 +30,9 @@ from matplotlib import cm
 import myapp.static.app.shared.fortran.fortran as fort
 #import myapp.static.app.shared.fortran.hook as hook
 
+=======
+import MySQLdb
+>>>>>>> e8a35af0addffa5c83df4379ca80cc6dea413ed3
 
 repoDir = '.'
 
@@ -37,10 +41,16 @@ def index(request):
     context = RequestContext(request,{})
     return HttpResponse(template.render(context))
 
+<<<<<<< HEAD
 def projects(request):
     program = request.GET['program']
     template = loader.get_template('myapp/projects.html')
     context = Context({'program':program})
+=======
+def dynamics(request):
+    template = loader.get_template('myapp/dynamics.html')
+    context = RequestContext(request,{})
+>>>>>>> e8a35af0addffa5c83df4379ca80cc6dea413ed3
     return HttpResponse(template.render(context))
 
 def path_to_dict(path):
@@ -81,6 +91,7 @@ def folderstruc(request):
     return HttpResponse(json.dumps(path_to_dict(request.GET['node'])), content_type="application/json")
 
 def loadcontenttotab(request):
+<<<<<<< HEAD
     path = request.GET['filename']
     ext = os.path.splitext(path)[1]
     head, filename = os.path.split(path)
@@ -89,6 +100,12 @@ def loadcontenttotab(request):
     else:
         template = loader.get_template('myapp/sourcecode.html')
     context = Context({'path':path,'ext':ext,'static':'/static/app/img/','filename':filename})
+=======
+    filename = request.GET['filename']
+    ext = os.path.splitext(filename)[1]
+    template = loader.get_template('myapp/sourcecode.html')
+    context = Context({'path':filename,'ext':ext})
+>>>>>>> e8a35af0addffa5c83df4379ca80cc6dea413ed3
     return HttpResponse(template.render(context))
 
 def code(request):
@@ -405,6 +422,7 @@ def compilefortran(request):
     path = request.GET['path']
     head, filename = os.path.split(path)
     folder = os.path.dirname(path) 
+<<<<<<< HEAD
     filenameShort, ext = os.path.splitext(filename)
     os.chdir(folder)
     check_output(['f2py','-m',filenameShort,'-c',filename])
@@ -823,3 +841,13 @@ def broyden(x_k, y_k):
   
 
 
+=======
+    os.chdir(folder)
+    check_output(['f2py','-m',head,'-c',filename])
+    os.chdir(savedPath)
+    return HttpResponse()
+  
+  
+
+  
+>>>>>>> e8a35af0addffa5c83df4379ca80cc6dea413ed3

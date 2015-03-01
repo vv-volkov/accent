@@ -350,6 +350,7 @@ def saveMatchAttr(request):
             output[k] = v
     
     db = MySQLdb.connect("localhost","root","root","test")
+    db = MySQLdb.connect("localhost","root","root","test" )
     cursor = db.cursor()
     cursor.execute(u"SELECT COUNT(*) AS CNT FROM srcdst WHERE TABLESRC = %s AND TABLEDST = %s".encode('utf-8') , (output['TABLESRC'], output['TABLEDST']))
     res = cursor.fetchone()
