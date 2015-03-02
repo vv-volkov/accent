@@ -6,6 +6,8 @@ import json
 import MySQLdb
 from pymongo import MongoClient
 import psycopg2
+import pyodbc
+import couchdb
 from bson.objectid import ObjectId
 
 def init():
@@ -52,17 +54,28 @@ def createInsert(action,tableName,id_db,tableDict,Init):
     if id_db == "0":
         db = connect(id_db,Init)
         cursor = db.cursor()
-        sql = prepareSql(action,tableName,tableDict)
+        sql = prepareSql(action,tableName,tableDict,'%s')
         if action == 'create':
             cursor.execute(sql)
         elif action == 'insert':
             cursor.execute(sql,tuple(tableDict.values()))
-        db.commit() 
+        db.commit()
     elif id_db == "1":
         db = connect(id_db,Init)
         if action == 'insert':          
             tableDict['_id'] = ObjectId()
             db[tableName].insert(tableDict)
+    elif id_db == "2":
+        db = connect(id_db,Init)
+        cursor = db.cursor()
+        sql = prepareSql(action,tableName,tableDict,'?')
+        if action == 'create':
+            cursor.execute(sql)
+        elif action == 'insert':
+            cursor.execute("SET IDENTITY_INSERT "+tableName+" ON")
+            cursor.execute(sql,tuple(tableDict.values()))
+            cursor.execute("SET IDENTITY_INSERT "+tableName+" OFF")
+        db.commit()
     elif id_db == "3":
         db = connect(id_db,Init)
         cursor = db.cursor()
@@ -75,6 +88,11 @@ def createInsert(action,tableName,id_db,tableDict,Init):
         elif action == 'insert':
             cursor.execute(sql,tuple(tableDict.values()))
         db.commit()
+    elif id_db == "4":
+        db = connect(id_db,Init)
+        if action == 'insert':          
+            tableDict['type'] = tableName
+            db.save(tableDict)
 
 def preparePostgreSql(action,tableName,tableDict,autoIncrement):
     """
@@ -98,7 +116,7 @@ def preparePostgreSql(action,tableName,tableDict,autoIncrement):
     return (sql, autoIncrement)
     
     
-def prepareSql(action,tableName,tableDict):
+def prepareSql(action,tableName,tableDict,placeHolder):
     """
     Prepare sql statement
     """
@@ -107,7 +125,7 @@ def prepareSql(action,tableName,tableDict):
     if action == 'insert':
         for v in tableDict.keys():
             attrs += "," + v
-            values += ",%s" 
+            values += "," +placeHolder
         sql = u"INSERT INTO "+tableName+" ("+attrs[1:]+") VALUES("+values[1:]+")"
     elif action == 'create':        
         for attr in tableDict:
@@ -117,7 +135,7 @@ def prepareSql(action,tableName,tableDict):
   
 def connect(id_db,Init):
     """
-    Connect to MySQL database
+    Connect to a database
     """
     for dbs in Init['databases']:
         if id_db == "0" and dbs['id'] == "0":
@@ -125,10 +143,14 @@ def connect(id_db,Init):
         elif id_db == "1" and dbs['id'] == "1":
             client = MongoClient(dbs['ip'],int(dbs['port']))
             db = client[dbs['name']]
+        elif id_db == "2" and dbs['id'] == "2":
+            db = pyodbc.connect("DRIVER=FreeTDS;SERVER="+dbs['ip']+";PORT="+dbs['port']+";DATABASE="+dbs['name']+";UID="+dbs['user']+";PWD="+dbs['password']+";TDS_Version=7.0;ClientCharset=UTF8;")
         elif id_db == "3" and dbs['id'] == "3":
             db = psycopg2.connect(host=dbs['ip'],dbname=dbs['name'],user=dbs['user'],password=dbs['password'])
+        elif id_db == "4" and dbs['id'] == "4":
+            client = couchdb.Server('http://'+dbs['user']+':'+dbs['password']+'@'+dbs['ip']+':'+dbs['port']+'/')
+            db = client[dbs['name']]
     return db
-
-
+  
 if __name__ == "__main__":
     init()

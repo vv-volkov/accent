@@ -15,7 +15,12 @@
         "name"    :    "reestr"
      },{
         "id"      :    "2",
-        "type"    :    "MSSQL"
+        "type"    :    "MSSQL",
+        "ip"      :    "192.168.56.1",
+        "port"    :    "1433",
+        "name"    :    "reestr",
+        "user"    :    "sa",
+        "password":    "123"
      },{
         "id"      :    "3",
         "type"    :    "Postgre",
@@ -23,24 +28,32 @@
         "user"    :    "postgres",
         "password":    "postgres",
         "name"    :    "reestr"
+    },{
+        "id"      :    "4",
+        "type"    :    "CouchDb",
+        "ip"      :    "127.0.0.1",
+        "port"    :    "5984",
+        "user"    :    "root",
+        "password":    "root",
+        "name"    :    "reestr"
     }],
     "tables"      :    [{
         "name"    :    "object",
-        "id_db"   :    "3"
+        "id_db"   :    "4"
     },{
         "name"    :    "menu",
-        "id_db"   :    "3"
+        "id_db"   :    "4"
     },{
         "name"    :    "datatype",
-        "id_db"   :    "3"
+        "id_db"   :    "4"
     },{
         "name"    :    "object_1_",
-        "id_db"   :    "3"
+        "id_db"   :    "4"
     },{
         "name"    :    "history_1_",
-        "id_db"   :    "3"
+        "id_db"   :    "4"
     },{
         "name"    :    "archive_1_",
-        "id_db"   :    "3"
+        "id_db"   :    "4"
     }]
 } 

@@ -1,7 +1,7 @@
 {
     "0":{
         "auto_increment"  :    "bigint not null auto_increment primary key",
-        "int"             :    "int not null",
+        "int"             :    "int",
         "int(0)"          :    "int not null default 0",
         "tinyint(0)"      :    "tinyint not null default 0",
         "varchar(55)"     :    "varchar(55)",
@@ -12,6 +12,18 @@
         "Field"           :    "int not null default 0"
     },
     "1":{},
+    "2":{
+        "auto_increment"  :    "int identity primary key",
+        "int"             :    "int",
+        "int(0)"          :    "int not null default 0",
+        "tinyint(0)"      :    "tinyint not null default 0",
+        "varchar(55)"     :    "varchar(55)",
+        "varchar(255)"    :    "varchar(255)",
+        "datetime"        :    "datetime",
+        "User"            :    "int not null default 0",
+        "Type"            :    "tinyint not null default 0",
+        "Field"           :    "int not null default 0"
+    },
     "3":{
         "auto_increment"  :    "auto_increment",
         "int"             :    "integer not null",
@@ -23,5 +35,6 @@
         "User"            :    "integer not null default 0",
         "Type"            :    "smallint not null default 0",
         "Field"           :    "integer not null default 0"
-    }
+    },
+    "4":{}
 }
